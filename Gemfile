@@ -19,6 +19,7 @@ gem 'jbuilder', '~> 2.0'
 gem 'bcrypt', '~> 3.1.7'
 # Use unicorn as the app server
 # gem 'unicorn'
+gem 'bootstrap-sass'
 
 group :development do
   # Use Capistrano for deployment
