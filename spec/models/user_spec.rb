@@ -74,7 +74,7 @@ describe User do
     end
   end
 
-    context "when password is not present" do
+  context "when password is not present" do
     let(:user) do
       user = User.new(name: "Example User", email: "user@example.com",
                        password: " ", password_confirmation: " ")
