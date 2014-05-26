@@ -63,7 +63,7 @@ describe "User pages" do
       context "after delete the user" do
         before { click_link('delete') }
 
-        it {should have_title('Sign up')}
+        it {should have_title('Our Walls')}
       end
 
     end
