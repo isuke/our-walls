@@ -8,13 +8,13 @@ describe "Authentication" do
     before { visit signin_path }
 
     it { should have_title('Sign in') }
-    it { should have_button('Sign in')}
+    it { should have_button('Sign in') }
 
     context "with invalid information" do
       before { click_button('Sign in') }
 
       it { should have_title('Sign in') }
-      it { should have_selector('div.alert.alert-error', 'Invalid')}
+      it { should have_selector('div.alert.alert-error', 'Invalid') }
     end
 
     context "with valid information" do
@@ -27,7 +27,7 @@ describe "Authentication" do
       end
 
       it { should have_title(user.name) }
-      it { should_not have_button('Sign in')}
+      it { should_not have_button('Sign in') }
     end
   end
 end
