@@ -50,5 +50,22 @@ describe "User pages" do
     before { visit user_path(user) }
 
     it { should have_title(user.name)}
+
+    describe "delete link" do
+
+      it { should have_link('delete')}
+      it "should be able to delete the user" do
+        expect do
+          click_link('delete')
+        end.to change(User, :count).by(-1)
+      end
+
+      context "after delete the user" do
+        before { click_link('delete') }
+
+        it {should have_title('Sign up')}
+      end
+
+    end
   end
 end
