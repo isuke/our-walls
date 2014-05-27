@@ -1,4 +1,9 @@
 class User < ActiveRecord::Base
+  has_many :friends          , dependent: :delete_all
+  has_many :friends_as_target, dependent: :delete_all,
+                               class_name: 'Friend',
+                               foreign_key: 'target_user_id'
+
   validates :name, presence: true, length: { maximum: 50 }
   validates :email, presence: true,
             format: { with: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i },
