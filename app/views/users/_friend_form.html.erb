@@ -1,0 +1,7 @@
+<div id=<%= "friend_from-#{user.id}" %> >
+  <% if current_user.friend? user %>
+    <%= render 'unmake_friend', user: user %>
+  <% else %>
+    <%= render 'make_friend', user: user %>
+  <% end %>
+</div>

@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
-  resources :users, only: [:create, :show, :destroy]
+  resources :users, only: [:create, :show, :destroy, :index]
   resources :sessions, only: [:create]
+  resources :friends, only: [:create]
   match '/home'   , to: 'static_pages#home', via: 'get'
   match '/signup' , to: 'users#new'        , via: 'get'
   match '/signin' , to: 'sessions#new'     , via: 'get'

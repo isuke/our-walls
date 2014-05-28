@@ -23,6 +23,14 @@ class User < ActiveRecord::Base
     Digest::SHA1.hexdigest(token.to_s)
   end
 
+  def friend?(other_user)
+    self.friends.find_by(target_user_id: other_user.id)
+  end
+
+  def make_friend(other_user)
+    friends.create!(target_user_id: other_user.id)
+  end
+
   private
 
     def create_remember_token

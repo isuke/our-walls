@@ -40,6 +40,7 @@ group :development, :test do
   gem 'capybara', git: 'git://github.com/jnicklas/capybara.git'
   # Use debugger
   # gem 'debugger'
+  gem 'faker'
 end
 
 group :doc do
