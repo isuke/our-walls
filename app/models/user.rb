@@ -28,7 +28,11 @@ class User < ActiveRecord::Base
   end
 
   def make_friend(other_user)
-    friends.create!(target_user_id: other_user.id)
+    self.friends.create!(target_user_id: other_user.id)
+  end
+
+  def unmake_friend(other_user)
+    self.friends.find_by(target_user_id: other_user.id).destroy
   end
 
   private

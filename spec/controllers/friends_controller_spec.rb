@@ -20,4 +20,15 @@ describe FriendsController do
       end.to change(Friend, :count).by(1)
     end
   end
+
+  describe "delete a friend with Ajax" do
+    before { user.make_friend(other_user) }
+    let(:friend) { user.friends.find_by(target_user_id: other_user.id) }
+    it "should decrement the Friend count" do
+      expect do
+        xhr :delete, :destroy, id: friend.id
+      end.to change(Friend, :count).by(-1)
+    end
+  end
+
 end
