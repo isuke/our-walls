@@ -4,13 +4,7 @@ describe FriendsController do
   let(:user)       { FactoryGirl.create(:user) }
   let(:other_user) { FactoryGirl.create(:user) }
 
-  before do
-    # TODO
-    # Capybaraを使用せずにログインする
-    remember_token = User.new_remember_token
-    cookies[:remember_token] = remember_token
-    user.update_attribute(:remember_token, User.encrypt(remember_token))
-  end
+  before { sign_in user, no_capybara: true }
 
   describe "creating a friend with Ajax" do
 

@@ -78,12 +78,7 @@ describe "User pages" do
     context "when signed-in user" do
 
       before do
-        # TODO
-        visit signin_path
-        fill_in "Email"   , with: user.email.upcase
-        fill_in "Password", with: user.password
-        click_button('Sign in')
-
+        sign_in user
         visit users_path
       end
 
