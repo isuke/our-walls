@@ -47,13 +47,17 @@ describe "User pages" do
   describe "user info page" do
     let(:user) { FactoryGirl.create(:user) }
 
-    before { visit user_path(user) }
+    before do
+      sign_in user
+      visit user_path(user)
+    end
 
     it { should have_title(user.name)}
+    it { should have_link('delete')}
+    it { should have_link('create wall') }
 
-    describe "delete link" do
+    context "when click the delete link" do
 
-      it { should have_link('delete')}
       it "should be able to delete the user" do
         expect do
           click_link('delete')
@@ -65,7 +69,12 @@ describe "User pages" do
 
         it {should have_title('Our Walls')}
       end
+    end
 
+    context "when click the create wall link" do
+      before { click_link 'create wall' }
+
+      it { should have_title('Create Wall') }
     end
   end
 

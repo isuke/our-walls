@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  resources :users   , only: [:create, :show, :destroy, :index]
+  resources :users, only: [:create, :show, :destroy, :index] do
+    member do
+      resources :walls, only: [:new, :create]
+    end
+  end
   resources :sessions, only: [:create]
   resources :friends , only: [:create, :destroy]
   match '/home'   , to: 'static_pages#home', via: 'get'

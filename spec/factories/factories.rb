@@ -5,4 +5,8 @@ FactoryGirl.define do
     password "foobar"
     password_confirmation "foobar"
   end
+
+  factory :wall do
+    sequence(:name)  { |n| "Wall #{n}" }
+  end
 end

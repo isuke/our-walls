@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140529022235) do
+ActiveRecord::Schema.define(version: 20140529105905) do
 
   create_table "friends", force: true do |t|
     t.integer  "user_id"
@@ -22,6 +22,17 @@ ActiveRecord::Schema.define(version: 20140529022235) do
 
   add_index "friends", ["user_id", "target_user_id"], name: "index_friends_on_user_id_and_target_user_id", unique: true
   add_index "friends", ["user_id"], name: "index_friends_on_user_id"
+
+  create_table "participants", force: true do |t|
+    t.integer  "wall_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "participants", ["user_id"], name: "index_participants_on_user_id"
+  add_index "participants", ["wall_id", "user_id"], name: "index_participants_on_wall_id_and_user_id", unique: true
+  add_index "participants", ["wall_id"], name: "index_participants_on_wall_id"
 
   create_table "users", force: true do |t|
     t.string   "name"
@@ -35,5 +46,11 @@ ActiveRecord::Schema.define(version: 20140529022235) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true
   add_index "users", ["name"], name: "index_users_on_name", unique: true
   add_index "users", ["remember_token"], name: "index_users_on_remember_token"
+
+  create_table "walls", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
 end
