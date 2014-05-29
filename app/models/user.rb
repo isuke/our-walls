@@ -4,7 +4,9 @@ class User < ActiveRecord::Base
                                class_name: 'Friend',
                                foreign_key: 'target_user_id'
 
-  validates :name, presence: true, length: { maximum: 50 }
+  validates :name, presence: true,
+            length: { maximum: 50 },
+            uniqueness: true
   validates :email, presence: true,
             format: { with: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i },
             uniqueness: true
