@@ -1,0 +1,15 @@
+<% provide(:title, "Users") %>
+
+<h1>Users</h1>
+
+<% @users.each do |user| %>
+  <div class="row", style="padding:5px">
+    <div class="col-xs-1">
+      <%= gravatar_for user, size: 52 %>
+    </div>
+    <div class="col-xs-11">
+      <%= user.name %>
+      <%= render 'friend_form', user: user %>
+    </div>
+  </div>
+<% end %>

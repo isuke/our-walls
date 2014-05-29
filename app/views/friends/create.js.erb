@@ -1,0 +1,1 @@
+$("<%= '#friend_from-' + @target_user.id.to_s %>").html("<%= escape_javascript(render('users/unmake_friend', user: @target_user)) %>")

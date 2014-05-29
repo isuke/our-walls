@@ -68,4 +68,35 @@ describe "User pages" do
 
     end
   end
+
+  describe "index" do
+    let(:user) { FactoryGirl.create(:user) }
+
+    before(:all) { 10.times { FactoryGirl.create(:user) } }
+    after(:all)  { User.delete_all }
+
+    context "when signed-in user" do
+
+      before do
+        sign_in user
+        visit users_path
+      end
+
+      it { should have_title('Users')}
+      it "should list each users" do
+        User.where(['id <> ?', user.id]).each do |u|
+          expect(page).to have_selector('div', text: u.name)
+        end
+      end
+    end
+
+    context "when unsigned-in user" do
+      before { visit users_path }
+
+      it { should have_title('Sign in') }
+      it { should have_selector('div.alert.alert-warning',
+                                text: 'Please sign in.') }
+    end
+
+  end
 end

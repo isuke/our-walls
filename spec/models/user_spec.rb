@@ -16,6 +16,10 @@ describe User do
   it { should respond_to(:password_confirmation) }
   it { should respond_to(:remember_token) }
   it { should respond_to(:authenticate) }
+  it { should respond_to(:friends) }
+  it { should respond_to(:friend?) }
+  it { should respond_to(:make_friend) }
+  it { should respond_to(:unmake_friend) }
 
   it { should be_valid }
 
@@ -114,5 +118,39 @@ describe User do
   describe "remember token" do
     before { user.save }
     its(:remember_token) { should_not be_blank }
+  end
+
+  describe "friend" do
+    context "when have friends" do
+      let(:other_user) { FactoryGirl.create(:user) }
+      before do
+        user.save
+        user.make_friend other_user
+      end
+
+      describe "#friend?" do
+        it "should return true" do
+          expect(user.friend?(other_user)).to be_true
+        end
+      end
+
+      describe "#unmake_friend" do
+        it "should decrement the Friend count" do
+          expect do
+            user.unmake_friend other_user
+          end.to change(Friend, :count).by(-1)
+        end
+      end
+    end
+
+    context "when have not a friend" do
+      let(:other_user) { FactoryGirl.create(:user) }
+      describe "#friend?" do
+        it "should return false" do
+          expect(user.friend?(other_user)).to be_false
+        end
+      end
+    end
+
   end
 end
