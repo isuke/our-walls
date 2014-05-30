@@ -17,6 +17,7 @@ describe User do
   it { should respond_to(:remember_token) }
   it { should respond_to(:authenticate) }
   it { should respond_to(:friends) }
+  it { should respond_to(:friend_users) }
   it { should respond_to(:friend?) }
   it { should respond_to(:make_friend) }
   it { should respond_to(:unmake_friend) }
@@ -140,6 +141,8 @@ describe User do
         user.save
         user.make_friend other_user
       end
+
+      its(:friend_users) { should include other_user }
 
       describe "#friend?" do
         it "should return true" do
