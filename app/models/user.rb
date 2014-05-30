@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   has_many :friends_as_target, dependent: :delete_all,
                                class_name: 'Friend',
                                foreign_key: 'target_user_id'
+  has_many :friend_users, through: :friends, source: :target_user
 
   validates :name, presence: true,
             length: { maximum: 50 },
