@@ -41,9 +41,9 @@ end
 
 def make_participants
   puts "make paticipants"
-  user = User.first
-  walls = Wall.all
-  walls[0..2].each do |wall|
-    user.participants.build(wall_id: wall.id).save
+  User.limit(2).each do |user|
+    Wall.limit(2).each do |wall|
+      user.participants.build(wall_id: wall.id).save
+    end
   end
 end

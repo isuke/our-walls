@@ -1,0 +1,10 @@
+<% provide(:title, @wall.name) %>
+
+<h1><%= @wall.name %></h1>
+
+<h2>Participating Users(<%= @wall.users.count %>)</h2>
+<ul>
+  <% @wall.users.each do |user| %>
+    <li><%= user.name %></li>
+  <% end %>
+</ul>

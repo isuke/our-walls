@@ -61,4 +61,26 @@ describe "Wall pages" do
 
   end
 
+  describe "show" do
+    let(:wall)  { FactoryGirl.create(:wall) }
+    let(:user1) { FactoryGirl.create(:user) }
+    let(:user2) { FactoryGirl.create(:user) }
+
+    before do
+      wall.participate(user1).save
+      wall.participate(user2).save
+
+      visit wall_path(wall)
+    end
+
+    it { should have_title(wall.name) }
+    it { should have_content("Participating Users(#{wall.users.count})") }
+
+    it "should list each users" do
+      wall.users.each do |u|
+        expect(page).to have_selector('li', text: u.name)
+      end
+    end
+  end
+
 end

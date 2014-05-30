@@ -21,6 +21,10 @@ class WallsController < ApplicationController
     render 'new'
   end
 
+  def show
+    @wall = Wall.find(params[:id])
+  end
+
   def destroy
     wall = Wall.find(params[:id])
     wall.destroy

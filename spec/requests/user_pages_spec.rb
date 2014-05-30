@@ -51,8 +51,6 @@ describe "User pages" do
     let(:wall) { FactoryGirl.create(:wall) }
 
     before do
-      user.save
-      wall.save
       wall.participate(user).save
 
       sign_in user
@@ -63,6 +61,7 @@ describe "User pages" do
     it { should have_link(delete_user, href: user_path(user))}
     it { should have_link(delete_wall, href: wall_path(wall)) }
     it { should have_content("Walls(#{user.walls.count})") }
+    it { should have_link(wall.name) }
 
     context "when click the delete link" do
 
@@ -96,6 +95,12 @@ describe "User pages" do
           click_link(delete_wall, href: wall_path(wall))
         end.to change(Participant, :count).by(-1)
       end
+    end
+
+    context "When click a wall link" do
+      before { click_link wall.name }
+
+      it { should have_title(wall.name) }
     end
   end
 
