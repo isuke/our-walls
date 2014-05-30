@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   end
   resources :sessions, only: [:create]
   resources :friends , only: [:create, :destroy]
+  resources :walls   , only: [:destroy]
   match '/home'   , to: 'static_pages#home', via: 'get'
   match '/signup' , to: 'users#new'        , via: 'get'
   match '/signin' , to: 'sessions#new'     , via: 'get'

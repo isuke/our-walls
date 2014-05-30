@@ -45,27 +45,34 @@ describe "User pages" do
   end
 
   describe "user info page" do
+    let(:delete_user) { 'delete account' }
+    let(:delete_wall) { 'delete' }
     let(:user) { FactoryGirl.create(:user) }
+    let(:wall) { FactoryGirl.create(:wall) }
 
     before do
+      user.save
+      wall.save
+      wall.participate(user).save
+
       sign_in user
       visit user_path(user)
     end
 
     it { should have_title(user.name)}
-    it { should have_link('delete')}
-    it { should have_link('create wall') }
+    it { should have_link(delete_user, href: user_path(user))}
+    it { should have_link(delete_wall, href: wall_path(wall)) }
 
     context "when click the delete link" do
 
       it "should be able to delete the user" do
         expect do
-          click_link('delete')
+          click_link(delete_user)
         end.to change(User, :count).by(-1)
       end
 
       context "after delete the user" do
-        before { click_link('delete') }
+        before { click_link(delete_user) }
 
         it {should have_title('Our Walls')}
       end
@@ -75,6 +82,19 @@ describe "User pages" do
       before { click_link 'create wall' }
 
       it { should have_title('Create Wall') }
+    end
+
+    context "when click a delete wall link" do
+      it "should be able to delete the wall" do
+        expect do
+          click_link(delete_wall, href: wall_path(wall))
+        end.to change(Wall, :count).by(-1)
+      end
+      it "should be able to delete participate" do
+        expect do
+          click_link(delete_wall, href: wall_path(wall))
+        end.to change(Participant, :count).by(-1)
+      end
     end
   end
 

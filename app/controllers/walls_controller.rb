@@ -13,12 +13,19 @@ class WallsController < ApplicationController
 
     User.transaction do
       @wall.save!
-      @wall.participants.build(user_id: @user.id).save!
+      @wall.participate(@user).save!
     end
     flash[:success] = "Create #{@wall.name}"
     redirect_to user_path current_user
   rescue
     render 'new'
+  end
+
+  def destroy
+    wall = Wall.find(params[:id])
+    wall.destroy
+    flash[:success] = "#{wall.name} deleted."
+    redirect_to user_path current_user
   end
 
   private
