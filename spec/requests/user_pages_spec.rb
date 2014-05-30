@@ -62,6 +62,7 @@ describe "User pages" do
     it { should have_title(user.name)}
     it { should have_link(delete_user, href: user_path(user))}
     it { should have_link(delete_wall, href: wall_path(wall)) }
+    it { should have_content("Walls(#{user.walls.count})") }
 
     context "when click the delete link" do
 

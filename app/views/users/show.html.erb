@@ -6,14 +6,19 @@
 </h2>
 <p><%= link_to "delete account", @user, method: :delete, data: { confirm: "You sure?" } %></p>
 
-<h3>Walls</h3>
+<h3>Walls(<%= @walls.count %>)</h3>
 
-<ul>
-  <% @user.walls.each do |wall| %>
-    <li>
-      <%= wall.name %>
-      <%= link_to "delete", wall, method: :delete, data: { confirm: "You sure?" } %>
-    </li>
-  <% end %>
-</ul>
+<% if @walls.any? %>
+  <ul>
+    <% @walls.each do |wall| %>
+      <li>
+        <%= wall.name %>
+        <%= link_to "delete", wall, method: :delete, data: { confirm: "You sure?" } %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>Wall is no presence.</p>
+  <p>Please [create wall] button click and create wall !</p>
+<% end %>
 <p><%= link_to "create wall", controller: "walls", action: "new" %></p>
