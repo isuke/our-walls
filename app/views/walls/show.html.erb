@@ -8,3 +8,16 @@
     <li><%= user.name %></li>
   <% end %>
 </ul>
+
+<h2>Invite Friends</h2>
+
+<ul>
+  <% current_user.friend_users.each do |user| %>
+    <% unless @wall.participate? user %>
+      <li>
+        <%= user.name %>
+        <%= render 'participants/invite_form', user: user %>
+      </li>
+    <% end %>
+  <% end %>
+</ul>

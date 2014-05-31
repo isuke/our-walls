@@ -62,14 +62,20 @@ describe "Wall pages" do
   end
 
   describe "show" do
-    let(:wall)  { FactoryGirl.create(:wall) }
-    let(:user1) { FactoryGirl.create(:user) }
-    let(:user2) { FactoryGirl.create(:user) }
+    let(:wall)         { FactoryGirl.create(:wall) }
+    let(:user1)        { FactoryGirl.create(:user) }
+    let(:user2)        { FactoryGirl.create(:user) }
+    let(:friend_user1) { FactoryGirl.create(:user) }
+    let(:friend_user2) { FactoryGirl.create(:user) }
 
     before do
+
       wall.participate(user1).save
       wall.participate(user2).save
+      user1.make_friend(friend_user1)
+      user1.make_friend(friend_user2)
 
+      sign_in user1
       visit wall_path(wall)
     end
 
@@ -79,6 +85,20 @@ describe "Wall pages" do
     it "should list each users" do
       wall.users.each do |u|
         expect(page).to have_selector('li', text: u.name)
+      end
+    end
+
+    it "shuld list each friend users" do
+      user1.friend_users do |u|
+        expect(page).to have_selector('li', text: u.name)
+      end
+    end
+
+    context "when click invite button" do
+      it "should increment participant" do
+        expect do
+          click_button 'Invite', match: :first
+        end.to change(Participant, :count).by(1)
       end
     end
   end

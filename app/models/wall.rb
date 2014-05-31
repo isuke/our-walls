@@ -7,4 +7,8 @@ class Wall < ActiveRecord::Base
   def participate(user)
     self.participants.build(user_id: user.id)
   end
+
+  def participate?(user)
+    self.users.include? user
+  end
 end
