@@ -6,6 +6,7 @@
 <ul>
   <% @wall.users.each do |user| %>
     <li><%= user.name %></li>
+    <%= render 'participants/leave_form', user: user %>
   <% end %>
 </ul>
 

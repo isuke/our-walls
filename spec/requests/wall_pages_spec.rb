@@ -94,6 +94,14 @@ describe "Wall pages" do
       end
     end
 
+    context "when click leave button" do
+      it "should decrement participant" do
+        expect do
+          click_button 'Leave', match: :first
+        end.to change(Participant, :count).by(-1)
+      end
+    end
+
     context "when click invite button" do
       it "should increment participant" do
         expect do

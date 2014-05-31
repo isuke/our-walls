@@ -1,0 +1,6 @@
+<%= form_for(Participant.find_by(wall_id: @wall.id, user_id: user.id),
+             method: :delete) do |f| %>
+  <%= f.hidden_field :wall_id %>
+  <%= f.hidden_field :user_id %>
+  <%= f.submit "Leave", class: "btn btn-sm btn-default" %>
+<% end %>
