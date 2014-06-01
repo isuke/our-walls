@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
                                class_name: 'Friend',
                                foreign_key: 'target_user_id'
   has_many :friend_users, through: :friends, source: :target_user
+  has_many :participants     , dependent: :delete_all
+  has_many :walls, through: :participants
 
   validates :name, presence: true,
             length: { maximum: 50 },

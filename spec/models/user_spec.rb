@@ -21,6 +21,8 @@ describe User do
   it { should respond_to(:friend?) }
   it { should respond_to(:make_friend) }
   it { should respond_to(:unmake_friend) }
+  it { should respond_to(:participants) }
+  it { should respond_to(:walls) }
 
   it { should be_valid }
 

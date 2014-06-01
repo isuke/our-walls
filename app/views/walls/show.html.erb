@@ -1,0 +1,24 @@
+<% provide(:title, @wall.name) %>
+
+<h1><%= @wall.name %></h1>
+
+<h2>Participating Users(<%= @wall.users.count %>)</h2>
+<ul>
+  <% @wall.users.each do |user| %>
+    <li><%= user.name %></li>
+    <%= render 'participants/leave_form', user: user %>
+  <% end %>
+</ul>
+
+<h2>Invite Friends</h2>
+
+<ul>
+  <% current_user.friend_users.each do |user| %>
+    <% unless @wall.participate? user %>
+      <li>
+        <%= user.name %>
+        <%= render 'participants/invite_form', user: user %>
+      </li>
+    <% end %>
+  <% end %>
+</ul>
