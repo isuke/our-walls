@@ -34,13 +34,16 @@ group :development, :test do
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'guard-rspec'
-  gem 'rb-fsevent', :require => false if RUBY_PLATFORM =~ /darwin/i
   gem 'factory_girl_rails'
   gem 'database_cleaner', github: 'bmabey/database_cleaner'
   gem 'capybara', git: 'git://github.com/jnicklas/capybara.git'
   # Use debugger
   # gem 'debugger'
   gem 'faker'
+end
+
+group :test, :darwin do
+  gem 'rb-fsevent', :require => false
 end
 
 group :doc do
