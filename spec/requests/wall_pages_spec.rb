@@ -62,16 +62,30 @@ describe "Wall pages" do
   end
 
   describe "show" do
-    let(:wall)         { FactoryGirl.create(:wall) }
-    let(:user1)        { FactoryGirl.create(:user) }
-    let(:user2)        { FactoryGirl.create(:user) }
-    let(:friend_user1) { FactoryGirl.create(:user) }
-    let(:friend_user2) { FactoryGirl.create(:user) }
+    let(:wall)          { FactoryGirl.create(:wall) }
+    let(:user1)         { FactoryGirl.create(:user) }
+    let(:user2)         { FactoryGirl.create(:user) }
+    let!(:friend_user1) { FactoryGirl.create(:user) }
+    let!(:friend_user2) { FactoryGirl.create(:user) }
+    let!(:participant1) do
+        FactoryGirl.create(:participant,
+                           wall: wall,
+                           user: user1)
+    end
+    let!(:participant2) do
+      FactoryGirl.create(:participant,
+                         wall: wall,
+                         user: user2)
+    end
+    let!(:post1_1) do
+      FactoryGirl.create(:post, participant: participant1)
+    end
+    let!(:post1_2) do
+      FactoryGirl.create(:post, participant: participant2)
+    end
 
     before do
-
-      wall.participate(user1).save
-      wall.participate(user2).save
+      #TODO: user FactoryGirl
       user1.make_friend(friend_user1)
       user1.make_friend(friend_user2)
 
@@ -88,9 +102,22 @@ describe "Wall pages" do
       end
     end
 
+    it "shuld list each posts" do
+      user1.friend_users do |u|
+        expect(page).to have_selector('li', text: u.name)
+      end
+    end
+
     it "shuld list each friend users" do
       user1.friend_users do |u|
         expect(page).to have_selector('li', text: u.name)
+      end
+    end
+
+    it "shuld list each posts" do
+      wall.posts do |p|
+        expect(page).to have_content(p.name)
+        expect(page).to have_content(p.context)
       end
     end
 
@@ -109,6 +136,7 @@ describe "Wall pages" do
         end.to change(Participant, :count).by(1)
       end
     end
+
   end
 
 end

@@ -14,4 +14,9 @@ FactoryGirl.define do
     user
     wall
   end
+
+  factory :post do
+    content "Lorem ipsum"
+    participant
+  end
 end

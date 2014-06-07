@@ -5,6 +5,7 @@ namespace :db do
     make_friends
     make_walls
     make_participants
+    make_posts
   end
 end
 
@@ -44,6 +45,16 @@ def make_participants
   User.limit(2).each do |user|
     Wall.limit(2).each do |wall|
       user.participants.build(wall_id: wall.id).save
+    end
+  end
+end
+
+def make_posts
+  puts "make posts"
+  Participant.limit(4).each do |participant|
+    50.times do
+      content = Faker::Lorem.paragraph
+      participant.posts.build(content: content).save
     end
   end
 end

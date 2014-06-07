@@ -9,6 +9,8 @@ describe Participant do
   subject { participant }
 
   it { should be_valid }
+  it { should respond_to(:posts) }
+
 
   context "when a combination user and target user is already present" do
     before { participant.dup.save }
