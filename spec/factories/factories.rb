@@ -9,4 +9,9 @@ FactoryGirl.define do
   factory :wall do
     sequence(:name)  { |n| "Wall #{n}" }
   end
+
+  factory :participant do
+    user
+    wall
+  end
 end

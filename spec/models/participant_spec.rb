@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Participant do
+  # TODO: use 'FactoryGirl.create(:participant)'
   let(:wall) { FactoryGirl.create(:wall) }
   let(:user) { FactoryGirl.create(:user) }
   let(:participant) { wall.participants.build(user_id: user.id) }
