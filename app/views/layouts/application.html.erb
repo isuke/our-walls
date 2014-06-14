@@ -12,10 +12,11 @@
   </head>
   <body>
     <div class="container">
+      <%= render 'layouts/header' %>
+
       <% flash.each do |key, value| %>
         <%= content_tag(:div, value, class: "alert alert-#{key}") %>
       <% end %>
-
       <%= yield %>
       <%= debug(params) if Rails.env.development? %>
     </div>
