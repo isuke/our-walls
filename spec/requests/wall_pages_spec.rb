@@ -85,7 +85,7 @@ describe "Wall pages" do
     end
 
     before do
-      #TODO: user FactoryGirl
+      #TODO: use FactoryGirl
       user1.make_friend(friend_user1)
       user1.make_friend(friend_user2)
 
@@ -134,6 +134,15 @@ describe "Wall pages" do
         expect do
           click_button 'Invite', match: :first
         end.to change(Participant, :count).by(1)
+      end
+    end
+
+    context "when post" do
+      before { fill_in 'post_content', with: "Lorem ipsum" }
+      it "should add posts" do
+        expect do
+          click_button "Post"
+        end.to change(Post, :count).by(1)
       end
     end
 

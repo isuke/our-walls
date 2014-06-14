@@ -12,4 +12,8 @@ class Wall < ActiveRecord::Base
   def participate?(user)
     self.users.include? user
   end
+
+  def participant(user)
+    self.participants.find_by(user_id: user.id)
+  end
 end
