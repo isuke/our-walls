@@ -1,8 +1,17 @@
 <% provide(:title) %>
 
-<h1>Welcome to the Our Walls</h1>
+<div class="well well-lg center">
+  <div class="page-header">
+    <h1>Welcome to the Our Walls</h1>
+    <!-- TODO: Write text -->
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+    </p>
+    <h1 class="glyphicon glyphicon-tree-deciduous icon-large"></h1>
+  </div>
 
-<% unless signed_in? %>
-  <%= link_to "Sign up now!", signup_path,
-              class: "btn btn-large btn-primary" %>
-<% end %>
+  <% unless signed_in? %>
+    <%= link_to "Sign up now!", signup_path,
+                class: "btn btn-large btn-primary" %>
+  <% end %>
+</div>
