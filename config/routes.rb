@@ -4,9 +4,13 @@ Rails.application.routes.draw do
       resources :walls, only: [:new, :create]
     end
   end
+  resources :walls, only: [:show  , :destroy] do
+    member do
+      resources :posts, only: [:create]
+    end
+  end
   resources :sessions    , only: [:create]
   resources :friends     , only: [:create, :destroy]
-  resources :walls       , only: [:show  , :destroy]
   resources :participants, only: [:create, :destroy]
   match '/home'   , to: 'static_pages#home', via: 'get'
   match '/signup' , to: 'users#new'        , via: 'get'

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140529105905) do
+ActiveRecord::Schema.define(version: 20140607032432) do
 
   create_table "friends", force: true do |t|
     t.integer  "user_id"
@@ -33,6 +33,15 @@ ActiveRecord::Schema.define(version: 20140529105905) do
   add_index "participants", ["user_id"], name: "index_participants_on_user_id"
   add_index "participants", ["wall_id", "user_id"], name: "index_participants_on_wall_id_and_user_id", unique: true
   add_index "participants", ["wall_id"], name: "index_participants_on_wall_id"
+
+  create_table "posts", force: true do |t|
+    t.integer  "participant_id"
+    t.text     "content"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "posts", ["participant_id", "created_at"], name: "index_posts_on_participant_id_and_created_at"
 
   create_table "users", force: true do |t|
     t.string   "name"

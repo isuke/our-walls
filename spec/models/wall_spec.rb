@@ -8,9 +8,11 @@ describe Wall do
 
   it { should respond_to(:name) }
   it { should respond_to(:participants) }
+  it { should respond_to(:participant) }
   it { should respond_to(:users) }
   it { should respond_to(:participate) }
   it { should respond_to(:participate?) }
+  it { should respond_to(:posts) }
 
   it { should be_valid }
 
