@@ -1,24 +1,17 @@
 <% provide(:title, @user.name) %>
 
-<h2>
-  <%= gravatar_for @user %>
-  <%= @user.name %>
-</h2>
-<p><%= link_to "delete account", @user, method: :delete, data: { confirm: "You sure?" } %></p>
-
-<h3>Walls(<%= @walls.count %>)</h3>
-
-<% if @walls.any? %>
-  <ul>
-    <% @walls.each do |wall| %>
-      <li>
-        <%= link_to wall.name, wall %>
-        <%= link_to "delete", wall, method: :delete, data: { confirm: "You sure?" } %>
-      </li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>Wall is no presence.</p>
-  <p>Please [create wall] button click and create wall !</p>
-<% end %>
-<p><%= link_to "create wall", controller: "walls", action: "new" %></p>
+<div class="well">
+  <%= render 'profile' %>
+  <div class="row">
+    <div class="col-md-4">
+      <h3>News <span class="badge">0</span></h3>
+      <!-- TODO -->
+    </div>
+    <div class="col-md-4">
+      <%= render 'walls', walls: @user.walls %>
+    </div>
+    <div class="col-md-4">
+      <%= render 'friends', friend_users: @user.friend_users %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+<div class="media">
+  <p class="pull-left">
+    <%= gravatar_for @user, size: 90 %>
+  </p>
+  <div class="media-body">
+    <h4 class="media-heading"><%= @user.name %></h4>
+    <p><%= @user.email %></p>
+    <p><%= link_to "delete account",
+                   @user,
+                   method: :delete,
+                   data: { confirm: "You sure?" } %>
+    </p>
+  </div>
+</div>
