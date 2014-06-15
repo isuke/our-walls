@@ -1,5 +1,5 @@
 <%= form_for(current_user.friends.build(target_user_id: user.id),
              remote: true) do |f| %>
   <%= f.hidden_field :target_user_id %>
-  <%= f.submit "Make friend", class: "btn btn-sm btn-primary" %>
+  <%= f.submit "Make friend", class: "btn btn-xs btn-primary" %>
 <% end %>

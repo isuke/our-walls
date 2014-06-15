@@ -1,0 +1,20 @@
+<h3>Walls <span class="badge"><%= walls.count %></span></h3>
+
+<table class="table">
+  <% walls.each do |wall| %>
+    <tr>
+      <td>
+        <%= link_to truncate(wall.name, length: 20), wall %>
+      </td>
+      <td>
+        <%= link_to "delete",
+                    wall,
+                    method: :delete,
+                    data: { confirm: "You sure?" } %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+<p>
+  <%= link_to "create wall", controller: "walls", action: "new"%>
+</p>

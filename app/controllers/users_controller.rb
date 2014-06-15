@@ -12,7 +12,7 @@ class UsersController < ApplicationController
     if @user.save
       sign_in @user
       flash[:success] = "Welcome to the Our Walls!"
-      redirect_to root_path
+      redirect_to @user
     else
       render 'new'
     end
@@ -20,7 +20,6 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    @walls = @user.walls
   end
 
   def destroy

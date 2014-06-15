@@ -1,0 +1,14 @@
+<h3>Friends <span class="badge"><%= friend_users.count %></span></h3>
+
+<table class="table">
+  <% friend_users.each do |friend_user| %>
+    <tr>
+      <td>
+        <%= truncate(friend_user.name, length: 20) %>
+      </td>
+      <td>
+        <%= render 'friend_form', user: friend_user %>
+      </td>
+    </tr>
+  <% end %>
+</table>

@@ -1,15 +1,20 @@
 <% provide(:title, "Users") %>
 
-<h1>Users</h1>
+<div class="well">
 
-<% @users.each do |user| %>
-  <div class="row", style="padding:5px">
-    <div class="col-xs-1">
-      <%= gravatar_for user, size: 52 %>
-    </div>
-    <div class="col-xs-11">
-      <%= user.name %>
-      <%= render 'friend_form', user: user %>
-    </div>
-  </div>
-<% end %>
+  <h1>Users</h1>
+
+  <ul class="media-list">
+    <% @users.each do |user| %>
+      <li class="media">
+        <p class="pull-left">
+          <%= gravatar_for user%>
+        </p>
+        <div class="media-body">
+          <h4 class="media-heading"><%= user.name %></h4>
+          <%= render 'friend_form', user: user %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+</div>

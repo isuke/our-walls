@@ -1,5 +1,5 @@
 <%= form_for @wall.participants.build(user_id: user.id) do |f| %>
   <%= f.hidden_field :wall_id %>
   <%= f.hidden_field :user_id %>
-  <%= f.submit "Invite", class: "btn btn-sm btn-primary" %>
+  <%= f.submit "Invite", class: "btn btn-xs btn-primary" %>
 <% end %>

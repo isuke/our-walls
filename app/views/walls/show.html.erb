@@ -1,40 +1,17 @@
 <% provide(:title, @wall.name) %>
 
-<h1><%= @wall.name %></h1>
+<div class="well">
+  <h1><%= @wall.name %></h1>
 
-<div class="row">
-  <div class="col-sm-4">
-    <h2>Posts</h2>
-    <%= render 'posts/form',
-                participant: @wall.participant(current_user) %>
-
-    <h2>Participating Users(<%= @wall.users.count %>)</h2>
-    <ul>
-      <% @wall.users.each do |user| %>
-        <li><%= user.name %></li>
-        <% if user != current_user %>
-          <%= render 'participants/leave_form', user: user %>
-        <% end %>
-      <% end %>
-    </ul>
-
-    <h2>Invite Friends</h2>
-
-    <ul>
-      <% current_user.friend_users.each do |user| %>
-        <% unless @wall.participate? user %>
-          <li>
-            <%= user.name %>
-            <%= render 'participants/invite_form', user: user %>
-          </li>
-        <% end %>
-      <% end %>
-    </ul>
-  </div>
-  <div class="col-sm-8">
-    <% @wall.posts.order("created_at").reverse_order.each do |post| %>
-      <%= render post %>
-    <% end %>
+  <div class="row">
+    <div class="col-sm-4">
+      <%= render 'posts/form',
+                  participant: @wall.participant(current_user) %>
+      <%= render 'participanting_users', users: @wall.users %>
+      <%= render 'invite_friends', users: current_user.friend_users %>
+    </div>
+    <div class="col-sm-8">
+      <%= render 'posts', posts: @wall.posts %>
+    </div>
   </div>
 </div>
-

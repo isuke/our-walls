@@ -1,0 +1,19 @@
+<ul class="media-list">
+  <% posts.order("created_at").reverse_order.each do |post| %>
+    <li class="media">
+      <p class="pull-left">
+        <%= gravatar_for post.user %>
+      </p>
+      <div class="media-body">
+        <h5 class="media-heading">
+          <%= post.user.name %>
+        </h5>
+        <!-- FIXME: Long string is interrupted -->
+        <p><%= post.content %></p>
+        <span class="timestamp">
+          <%= time_ago_in_words(post.created_at) %> ago.
+        </span>
+      </div>
+    </li>
+  <% end %>
+</ul>
