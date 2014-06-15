@@ -1,0 +1,12 @@
+<h3>Invite Friends</h3>
+
+<table class="table">
+  <% users.each do |user| %>
+    <% unless @wall.participate? user %>
+      <tr>
+        <td><%= truncate(user.name, length: 20) %></td>
+        <td><%= render 'participants/invite_form', user: user %></td>
+      </tr>
+    <% end %>
+  <% end %>
+</table>

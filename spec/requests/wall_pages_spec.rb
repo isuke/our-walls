@@ -94,7 +94,8 @@ describe "Wall pages" do
     end
 
     it { should have_title(wall.name) }
-    it { should have_content("Participating Users(#{wall.users.count})") }
+    it { should have_content("Participating") }
+    it { should have_selector("span", text: wall.users.count) }
 
     it "should list each users" do
       wall.users.each do |u|

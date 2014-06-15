@@ -1,0 +1,14 @@
+<h3>
+  Participating Users <span class="badge"><%= users.count %></span>
+</h3>
+
+<table class="table">
+  <% users.each do |user| %>
+    <% if user != current_user %>
+      <tr>
+        <td><%= truncate(user.name, length: 20) %></td>
+        <td><%= render 'participants/leave_form', user: user %></td>
+      </tr>
+    <% end %>
+  <% end %>
+</table>

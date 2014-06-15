@@ -5,7 +5,7 @@ class PostsController < ApplicationController
     if @post.save
       flash[:success] = "Add post."
     else
-      flash[:error] = "error"
+      flash[:danger] = "error"
     end
 
     redirect_to @wall
