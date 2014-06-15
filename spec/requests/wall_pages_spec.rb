@@ -5,9 +5,9 @@ describe "Wall pages" do
   subject { page }
 
   describe "new" do
+    let(:user) { FactoryGirl.create(:user) }
 
     context "when signed-in user" do
-      let(:user) { FactoryGirl.create(:user) }
       let(:submit) { 'Create new wall' }
 
       before do
@@ -50,15 +50,10 @@ describe "Wall pages" do
       end
     end
 
-    context "when unsigned-in user" do
-      let(:user) { FactoryGirl.create(:user) }
+    context "when unsignd-in user" do
       before { visit new_wall_path user }
-
-      it { should have_title('Sign in') }
-      it { should have_selector('div.alert.alert-warning',
-                                text: 'Please sign in.') }
+      it { should have_title('Our Walls') }
     end
-
   end
 
   describe "show" do
@@ -84,69 +79,79 @@ describe "Wall pages" do
       FactoryGirl.create(:post, participant: participant2)
     end
 
+
     before do
       #TODO: use FactoryGirl
       user1.make_friend(friend_user1)
       user1.make_friend(friend_user2)
-
-      sign_in user1
-      visit wall_path(wall)
     end
 
-    it { should have_title(wall.name) }
-    it { should have_content("Participating") }
-    it { should have_selector("span", text: wall.users.count) }
+    context "when signed-in user" do
 
-    it "should list each users" do
-      wall.users.each do |u|
-        expect(page).to have_selector('li', text: u.name)
+      before do
+        sign_in user1
+        visit wall_path(wall)
+      end
+
+      it { should have_title(wall.name) }
+      it { should have_content("Participating") }
+      it { should have_selector("span", text: wall.users.count) }
+
+      it "should list each users" do
+        wall.users.each do |u|
+          expect(page).to have_selector('li', text: u.name)
+        end
+      end
+
+      it "shuld list each posts" do
+        user1.friend_users do |u|
+          expect(page).to have_selector('li', text: u.name)
+        end
+      end
+
+      it "shuld list each friend users" do
+        user1.friend_users do |u|
+          expect(page).to have_selector('li', text: u.name)
+        end
+      end
+
+      it "shuld list each posts" do
+        wall.posts do |p|
+          expect(page).to have_content(p.name)
+          expect(page).to have_content(p.context)
+        end
+      end
+
+      context "when click leave button" do
+        it "should decrement participant" do
+          expect do
+            click_button 'Leave', match: :first
+          end.to change(Participant, :count).by(-1)
+        end
+      end
+
+      context "when click invite button" do
+        it "should increment participant" do
+          expect do
+            click_button 'Invite', match: :first
+          end.to change(Participant, :count).by(1)
+        end
+      end
+
+      context "when post" do
+        before { fill_in 'post_content', with: "Lorem ipsum" }
+        it "should add posts" do
+          expect do
+            click_button "Post"
+          end.to change(Post, :count).by(1)
+        end
       end
     end
 
-    it "shuld list each posts" do
-      user1.friend_users do |u|
-        expect(page).to have_selector('li', text: u.name)
-      end
+    context "when unsignd-in user" do
+      before { visit wall_path(wall) }
+      it { should have_title('Our Walls') }
     end
-
-    it "shuld list each friend users" do
-      user1.friend_users do |u|
-        expect(page).to have_selector('li', text: u.name)
-      end
-    end
-
-    it "shuld list each posts" do
-      wall.posts do |p|
-        expect(page).to have_content(p.name)
-        expect(page).to have_content(p.context)
-      end
-    end
-
-    context "when click leave button" do
-      it "should decrement participant" do
-        expect do
-          click_button 'Leave', match: :first
-        end.to change(Participant, :count).by(-1)
-      end
-    end
-
-    context "when click invite button" do
-      it "should increment participant" do
-        expect do
-          click_button 'Invite', match: :first
-        end.to change(Participant, :count).by(1)
-      end
-    end
-
-    context "when post" do
-      before { fill_in 'post_content', with: "Lorem ipsum" }
-      it "should add posts" do
-        expect do
-          click_button "Post"
-        end.to change(Post, :count).by(1)
-      end
-    end
-
   end
 
 end

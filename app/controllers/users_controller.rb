@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   include ApplicationHelper
 
-  before_action :signed_in_user, only: [:index]
+  skip_before_action :authorize, only: [:new, :create]
 
   def new
     @user = User.new
@@ -20,6 +20,10 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    unless current_user?(@user)
+      flash[:danger] = "Please sign in with the corrent user."
+      redirect_to root_path
+    end
   end
 
   def destroy
