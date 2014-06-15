@@ -50,68 +50,77 @@ describe "User pages" do
     let(:user) { FactoryGirl.create(:user) }
     let(:wall) { FactoryGirl.create(:wall) }
 
-    before do
-      wall.participate(user).save
-
-    end
+    before { wall.participate(user).save }
 
     context "when signd-in user" do
 
-      before do
-        sign_in user
-        visit user_path(user)
-      end
+      before { sign_in user }
 
-      it { should have_title(user.name) }
-      it { should have_content(user.name) }
-      it { should have_content(user.email) }
-      it { should have_link(delete_user, href: user_path(user)) }
-      it { should have_link(delete_wall, href: wall_path(wall)) }
-      it { should have_content("Walls") }
-      it { should have_selector("span", text: user.walls.count) }
-      it { should have_link(wall.name) }
+      context "visit this user info page" do
 
-      context "when click the delete link" do
+        before { visit user_path(user) }
 
-        it "should be able to delete the user" do
-          expect do
-            click_link(delete_user)
-          end.to change(User, :count).by(-1)
+        it { should have_title(user.name) }
+        it { should have_content(user.name) }
+        it { should have_content(user.email) }
+        it { should have_link(delete_user, href: user_path(user)) }
+        it { should have_link(delete_wall, href: wall_path(wall)) }
+        it { should have_content("Walls") }
+        it { should have_selector("span", text: user.walls.count) }
+        it { should have_link(wall.name) }
+
+        context "when click the delete link" do
+
+          it "should be able to delete the user" do
+            expect do
+              click_link(delete_user)
+            end.to change(User, :count).by(-1)
+          end
+
+          context "after delete the user" do
+            before { click_link(delete_user) }
+
+            it {should have_title('Our Walls')}
+          end
         end
 
-        context "after delete the user" do
-          before { click_link(delete_user) }
+        context "when click the create wall link" do
+          before { click_link 'create wall' }
 
-          it {should have_title('Our Walls')}
+          it { should have_title('Create Wall') }
         end
-      end
 
-      context "when click the create wall link" do
-        before { click_link 'create wall' }
-
-        it { should have_title('Create Wall') }
-      end
-
-      context "when click a delete wall link" do
-        it "should be able to delete the wall" do
-          expect do
-            click_link(delete_wall, href: wall_path(wall))
-          end.to change(Wall, :count).by(-1)
+        context "when click a delete wall link" do
+          it "should be able to delete the wall" do
+            expect do
+              click_link(delete_wall, href: wall_path(wall))
+            end.to change(Wall, :count).by(-1)
+          end
+          it "should be able to delete participate" do
+            expect do
+              click_link(delete_wall, href: wall_path(wall))
+            end.to change(Participant, :count).by(-1)
+          end
         end
-        it "should be able to delete participate" do
-          expect do
-            click_link(delete_wall, href: wall_path(wall))
-          end.to change(Participant, :count).by(-1)
+
+        context "When click a wall link" do
+          before { click_link wall.name }
+
+          it { should have_title(wall.name) }
         end
+
+        # TODO: friends spec
       end
 
-      context "When click a wall link" do
-        before { click_link wall.name }
+      context "visit other user info page" do
+        let(:other_user) { FactoryGirl.create(:user) }
 
-        it { should have_title(wall.name) }
+        before { visit user_path(other_user) }
+
+        it { should have_title('Our Walls') }
+        it { should have_selector('div.alert.alert-danger',
+                                  text: 'Please sign in with the corrent user.') }
       end
-
-      # TODO: friends spec
     end
 
     context "when unsignd-in user" do
