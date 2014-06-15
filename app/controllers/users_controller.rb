@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   include ApplicationHelper
 
-  before_action :signed_in_user, only: [:index]
+  skip_before_action :authorize, only: [:new, :create]
 
   def new
     @user = User.new
