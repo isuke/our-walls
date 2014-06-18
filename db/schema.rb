@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140607032432) do
+ActiveRecord::Schema.define(version: 20140618140519) do
 
   create_table "friends", force: true do |t|
     t.integer  "user_id"
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 20140607032432) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "owner",      default: false
   end
 
   add_index "participants", ["user_id"], name: "index_participants_on_user_id"

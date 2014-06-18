@@ -9,11 +9,19 @@ class Wall < ActiveRecord::Base
     self.participants.build(user_id: user.id)
   end
 
-  def participate?(user)
+  def participant(user)
+    self.participants.find_by(user_id: user.id)
+  end
+
+  def participant?(user)
     self.users.include? user
   end
 
-  def participant(user)
-    self.participants.find_by(user_id: user.id)
+  def owner
+    self.participants.find_by(owner: true).user
+  end
+
+  def owner?(user)
+    self.participant(user).owner
   end
 end
