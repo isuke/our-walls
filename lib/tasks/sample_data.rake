@@ -42,10 +42,8 @@ end
 
 def make_participants
   puts "make paticipants"
-  User.limit(2).each do |user|
-    Wall.limit(2).each do |wall|
-      user.participants.build(wall_id: wall.id).save
-    end
+  Wall.all.each do |wall|
+    User.all.sample(1).participants.build(wall_id: wall.id, owner: true).save
   end
 end
 

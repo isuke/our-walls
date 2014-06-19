@@ -11,7 +11,9 @@ class WallsController < ApplicationController
 
     User.transaction do
       @wall.save!
-      @wall.participate(@user).save!
+      p = @wall.participate(@user)
+      p.owner = true
+      p.save
     end
     flash[:success] = "Create #{@wall.name}"
     redirect_to user_path current_user

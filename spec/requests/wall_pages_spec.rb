@@ -65,12 +65,14 @@ describe "Wall pages" do
     let!(:participant1) do
         FactoryGirl.create(:participant,
                            wall: wall,
-                           user: user1)
+                           user: user1,
+                           owner: true)
     end
     let!(:participant2) do
       FactoryGirl.create(:participant,
                          wall: wall,
-                         user: user2)
+                         user: user2,
+                         owner: true)
     end
     let!(:post1_1) do
       FactoryGirl.create(:post, participant: participant1)
