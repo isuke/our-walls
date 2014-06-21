@@ -71,8 +71,7 @@ describe "Wall pages" do
     let!(:participant2) do
       FactoryGirl.create(:participant,
                          wall: wall,
-                         user: user2,
-                         owner: true)
+                         user: user2)
     end
     let!(:post1_1) do
       FactoryGirl.create(:post, participant: participant1)
@@ -80,7 +79,6 @@ describe "Wall pages" do
     let!(:post1_2) do
       FactoryGirl.create(:post, participant: participant2)
     end
-
 
     before do
       #TODO: use FactoryGirl
@@ -90,64 +88,106 @@ describe "Wall pages" do
 
     context "when signed-in user" do
 
-      before do
-        sign_in user1
-        visit wall_path(wall)
-      end
+      context "When owner user" do
+        before do
+          sign_in user1
+          visit wall_path(wall)
+        end
 
-      it { should have_title(wall.name) }
-      it { should have_content("Participating") }
-      it { should have_selector("span", text: wall.users.count) }
+        it { should have_title(wall.name) }
+        it { should have_content("owner is You") }
+        it { should have_content("Participating") }
+        it { should have_selector("span", text: wall.users.count) }
+        it { should have_button 'Leave' }
+        it { should have_button 'Invite' }
 
-      it "should list each users" do
-        wall.users.each do |u|
-          expect(page).to have_selector('li', text: u.name)
+        it "should list each users" do
+          wall.users.each do |u|
+            expect(page).to have_selector('li', text: u.name)
+          end
+        end
+
+        it "shuld list each posts" do
+          wall.posts do |p|
+            expect(page).to have_content(p.name)
+            expect(page).to have_content(p.context)
+          end
+        end
+
+        context "when post" do
+          before { fill_in 'post_content', with: "Lorem ipsum" }
+          it "should add posts" do
+            expect do
+              click_button "Post"
+            end.to change(Post, :count).by(1)
+          end
+        end
+
+        it "shuld list each friend users" do
+          user1.friend_users do |u|
+            expect(page).to have_selector('li', text: u.name)
+          end
+        end
+
+        context "when click leave button" do
+          it "should decrement participant" do
+            expect do
+              click_button 'Leave', match: :first
+            end.to change(Participant, :count).by(-1)
+          end
+        end
+
+        context "when click invite button" do
+          it "should increment participant" do
+            expect do
+              click_button 'Invite', match: :first
+            end.to change(Participant, :count).by(1)
+          end
         end
       end
 
-      it "shuld list each posts" do
-        user1.friend_users do |u|
-          expect(page).to have_selector('li', text: u.name)
+      context "When not owner user" do
+        before do
+          sign_in user2
+          visit wall_path(wall)
+        end
+
+        it { should have_title(wall.name) }
+        it { should have_content("owner is #{user1.name}") }
+        it { should have_content("Participating") }
+        it { should have_selector("span", text: wall.users.count) }
+        it { should_not have_button 'Leave' }
+        it { should_not have_button 'Invite' }
+
+        it "should list each users" do
+          wall.users.each do |u|
+            expect(page).to have_selector('li', text: u.name)
+          end
+        end
+
+        it "shuld list each posts" do
+          wall.posts do |p|
+            expect(page).to have_content(p.name)
+            expect(page).to have_content(p.context)
+          end
+        end
+
+        context "when post" do
+          before { fill_in 'post_content', with: "Lorem ipsum" }
+          it "should add posts" do
+            expect do
+              click_button "Post"
+            end.to change(Post, :count).by(1)
+          end
+        end
+
+        it "shuld list each friend users" do
+          user1.friend_users do |u|
+            expect(page).to have_selector('li', text: u.name)
+          end
         end
       end
 
-      it "shuld list each friend users" do
-        user1.friend_users do |u|
-          expect(page).to have_selector('li', text: u.name)
-        end
-      end
-
-      it "shuld list each posts" do
-        wall.posts do |p|
-          expect(page).to have_content(p.name)
-          expect(page).to have_content(p.context)
-        end
-      end
-
-      context "when click leave button" do
-        it "should decrement participant" do
-          expect do
-            click_button 'Leave', match: :first
-          end.to change(Participant, :count).by(-1)
-        end
-      end
-
-      context "when click invite button" do
-        it "should increment participant" do
-          expect do
-            click_button 'Invite', match: :first
-          end.to change(Participant, :count).by(1)
-        end
-      end
-
-      context "when post" do
-        before { fill_in 'post_content', with: "Lorem ipsum" }
-        it "should add posts" do
-          expect do
-            click_button "Post"
-          end.to change(Post, :count).by(1)
-        end
-      end
     end
 
     context "when unsignd-in user" do

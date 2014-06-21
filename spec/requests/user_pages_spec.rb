@@ -48,9 +48,22 @@ describe "User pages" do
     let(:delete_user) { 'delete account' }
     let(:delete_wall) { 'delete' }
     let(:user) { FactoryGirl.create(:user) }
-    let(:wall) { FactoryGirl.create(:wall) }
+    let(:other_user) { FactoryGirl.create(:user) }
+    let(:wall1) { FactoryGirl.create(:wall) }
+    let(:wall2) { FactoryGirl.create(:wall) }
 
-    before { wall.participate(user).save }
+    before do
+      #TODO: refactoring
+      p1 = wall1.participate(user)
+      p1.owner = true
+      p1.save
+      wall1.participate(other_user).save
+
+      wall2.participate(user).save
+      p2 = wall2.participate(other_user)
+      p2.owner = true
+      p2.save
+      end
 
     context "when signd-in user" do
 
@@ -64,10 +77,14 @@ describe "User pages" do
         it { should have_content(user.name) }
         it { should have_content(user.email) }
         it { should have_link(delete_user, href: user_path(user)) }
-        it { should have_link(delete_wall, href: wall_path(wall)) }
         it { should have_content("Walls") }
         it { should have_selector("span", text: user.walls.count) }
-        it { should have_link(wall.name) }
+        it { should have_link(wall1.name) }
+        it { should have_link(wall2.name) }
+        it { should     have_content("You") }
+        it { should     have_content(wall2.owner.name) }
+        it { should     have_link(delete_wall, href: wall_path(wall1)) }
+        it { should_not have_link(delete_wall, href: wall_path(wall2)) }
 
         context "when click the delete link" do
 
@@ -93,20 +110,20 @@ describe "User pages" do
         context "when click a delete wall link" do
           it "should be able to delete the wall" do
             expect do
-              click_link(delete_wall, href: wall_path(wall))
+              click_link(delete_wall, href: wall_path(wall1))
             end.to change(Wall, :count).by(-1)
           end
           it "should be able to delete participate" do
             expect do
-              click_link(delete_wall, href: wall_path(wall))
-            end.to change(Participant, :count).by(-1)
+              click_link(delete_wall, href: wall_path(wall1))
+            end.to change(Participant, :count).by(-wall1.users.count)
           end
         end
 
         context "When click a wall link" do
-          before { click_link wall.name }
+          before { click_link wall1.name }
 
-          it { should have_title(wall.name) }
+          it { should have_title(wall1.name) }
         end
 
         # TODO: friends spec

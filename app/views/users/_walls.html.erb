@@ -6,12 +6,21 @@
       <td>
         <%= link_to truncate(wall.name, length: 20), wall %>
       </td>
-      <td>
-        <%= link_to "delete",
-                    wall,
-                    method: :delete,
-                    data: { confirm: "You sure?" } %>
-      </td>
+      <% if wall.owner?(current_user) %>
+        <td>
+          <strong>You</strong>
+        </td>
+        <td>
+          <%= link_to "delete",
+                      wall,
+                      method: :delete,
+                      data: { confirm: "You sure?" } %>
+        </td>
+      <% else %>
+        <td colspan="2">
+          <%= truncate(wall.owner.name, length: 20) %>
+        </td>
+      <% end %>
     </tr>
   <% end %>
 </table>

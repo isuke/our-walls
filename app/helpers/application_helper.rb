@@ -9,4 +9,12 @@ module ApplicationHelper
     end
   end
 
+  def pronoun_or_name_for(user, pronoun='You')
+    if current_user?(user)
+      pronoun
+    else
+      user.name
+    end
+  end
+
 end
