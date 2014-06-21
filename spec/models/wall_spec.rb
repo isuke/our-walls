@@ -11,8 +11,11 @@ describe Wall do
   it { should respond_to(:participant) }
   it { should respond_to(:users) }
   it { should respond_to(:participate) }
-  it { should respond_to(:participate?) }
+  it { should respond_to(:participant) }
+  it { should respond_to(:participant?) }
   it { should respond_to(:posts) }
+  it { should respond_to(:owner) }
+  it { should respond_to(:owner?) }
 
   it { should be_valid }
 
@@ -32,22 +35,39 @@ describe Wall do
     it { should be_valid }
   end
 
-  describe "participate?" do
+  describe "participate" do
     let(:user) { FactoryGirl.create(:user) }
 
     context "when participate user" do
       before { wall.participate(user).save! }
 
         it "should be true" do
-          expect(wall.participate?(user)).to be_true
+          expect(wall.participant?(user)).to be_true
         end
+
+      context "when owner user" do
+        before { wall.participant(user).update_attributes!(owner: true) }
+
+        it "should be true" do
+          expect(wall.owner?(user)).to be_true
+        end
+
+        its(:owner) { should eq user }
+      end
+
+      context "when not owner user" do
+        it "should be false" do
+          expect(wall.owner?(user)).to be_false
+        end
+      end
     end
 
     context "when no participate user" do
       it "should be false" do
-        expect(wall.participate?(user)).to be_false
+        expect(wall.participant?(user)).to be_false
       end
     end
+
   end
 
 end

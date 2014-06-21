@@ -10,7 +10,7 @@ describe Participant do
 
   it { should be_valid }
   it { should respond_to(:posts) }
-
+  it { should respond_to(:owner?) }
 
   context "when a combination user and target user is already present" do
     before { participant.dup.save }
