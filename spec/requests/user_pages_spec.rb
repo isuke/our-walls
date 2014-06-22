@@ -45,25 +45,27 @@ describe "User pages" do
   end
 
   describe "user info page" do
-    let(:delete_user) { 'delete account' }
-    let(:delete_wall) { 'delete' }
-    let(:user) { FactoryGirl.create(:user) }
-    let(:other_user) { FactoryGirl.create(:user) }
-    let(:wall1) { FactoryGirl.create(:wall) }
-    let(:wall2) { FactoryGirl.create(:wall) }
+    let(:delete_user)  { 'delete account' }
+    let(:delete_wall)  { 'delete' }
+    let(:user)         { FactoryGirl.create(:user) }
+    let(:other_user)   { FactoryGirl.create(:user) }
+    let(:wall1)        { FactoryGirl.create(:wall) }
+    let(:wall2)        { FactoryGirl.create(:wall) }
 
     before do
-      #TODO: refactoring
-      p1 = wall1.participate(user)
-      p1.owner = true
-      p1.save
-      wall1.participate(other_user).save
-
-      wall2.participate(user).save
-      p2 = wall2.participate(other_user)
-      p2.owner = true
-      p2.save
-      end
+      FactoryGirl.create(:owner,
+                         wall_id: wall1.id,
+                         user_id: user.id)
+      FactoryGirl.create(:participant,
+                         wall_id: wall1.id,
+                         user_id: other_user.id)
+      FactoryGirl.create(:participant,
+                         wall_id: wall2.id,
+                         user_id: user.id)
+      FactoryGirl.create(:owner,
+                         wall_id: wall2.id,
+                         user_id: other_user.id)
+    end
 
     context "when signd-in user" do
 
@@ -130,8 +132,6 @@ describe "User pages" do
       end
 
       context "visit other user info page" do
-        let(:other_user) { FactoryGirl.create(:user) }
-
         before { visit user_path(other_user) }
 
         it { should have_title('Our Walls') }

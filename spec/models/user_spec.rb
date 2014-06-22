@@ -2,10 +2,7 @@ require 'spec_helper'
 
 describe User do
 
-  let(:user) do
-    User.new(name: "Example User", email: "user@example.com",
-             password: "foobar", password_confirmation: "foobar")
-  end
+  let(:user) { FactoryGirl.build(:user) }
 
   subject { user }
 
@@ -95,8 +92,9 @@ describe User do
 
   context "when password is not present" do
     let(:user) do
-      user = User.new(name: "Example User", email: "user@example.com",
-                       password: " ", password_confirmation: " ")
+      FactoryGirl.build(:user,
+                         password: " ",
+                         password_confirmation: " ")
     end
     it { should_not be_valid }
   end
