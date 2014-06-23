@@ -1,17 +1,70 @@
 namespace :db do
   desc "Fill database with sample data"
   task populate: :environment do
-    make_users
-    make_friends
-    make_walls
-    make_participants
-    make_posts
+    users = Array.new
+    walls = Array.new
+    make_users(60, 3) do |user|
+      users << user
+    end
+    make_walls(3) do |wall|
+      walls << wall
+    end
+
+    make_friends(users)
+    make_participants(walls, users)
   end
 end
 
-def make_users
+def make_users(num, limit=num)
   puts "make users"
-  100.times do |n|
+  num.times do |n|
+    u =  make_user(n)
+    yield u if n < limit
+  end
+end
+
+def make_walls(num, limit=num)
+  puts "make walls"
+  num.times do |n|
+    w = make_wall(n)
+    yield w if n < limit
+  end
+end
+
+def make_friends(users)
+  puts "make friends"
+  users.each_with_index do |user, i|
+    dup_users = users.dup
+    main_user = dup_users.delete_at(i)
+    dup_users.each do |user|
+      make_friend(main_user, user)
+    end
+  end
+end
+
+def make_participants(walls, users)
+  puts "make participants"
+  walls.each_with_index do |wall, i|
+    dup_users = users.dup
+    owner = dup_users.delete_at(i)
+    make_participant_and_posts(10, wall, owner, true)
+    dup_users.each do |user|
+      make_participant_and_posts(10, wall, user)
+    end
+  end
+end
+
+private
+
+  def make_participant_and_posts(num, wall, user, owner=false, limit=num)
+    participant = make_participant(wall, user, owner)
+    num.times do |n|
+      post = make_post(participant)
+      # yield post if n < limit
+    end
+  end
+
+  def make_user(n)
     name  = Faker::Name.name
     email = "example-#{n}@example.com"
     password  = "foobar"
@@ -20,41 +73,21 @@ def make_users
                  password: password,
                  password_confirmation: password)
   end
-end
 
-def make_friends
-  puts "make friends"
-  users = User.all
-  users[0..4].each do |u1|
-    users[5..9].each do |u2|
-      u1.friends.build(target_user_id: u2.id).save
-    end
+  def make_friend(user, target_user)
+    user.friends.create!(target_user_id: target_user.id)
   end
-end
 
-def make_walls
-  puts "make walls"
-  5.times do |n|
-    name = "Wall-#{n+1}"
-    Wall.create!(name: name)
+  def make_wall(n)
+    name = "Wall-#{n}"
+    wall = Wall.create!(name: name)
   end
-end
 
-def make_participants
-  puts "make paticipants"
-  Wall.all.each do |wall|
-    User.all.sample(1).each do |u|
-      u.participants.build(wall_id: wall.id, owner: true).save
-    end
+  def make_participant(wall, user, owner=false)
+    wall.participants.create!(user_id: user.id, owner: owner)
   end
-end
 
-def make_posts
-  puts "make posts"
-  Participant.limit(4).each do |participant|
-    50.times do
-      content = Faker::Lorem.paragraph
-      participant.posts.build(content: content).save
-    end
+  def make_post(participant)
+    content = Faker::Lorem.paragraph
+    participant.posts.create!(content: content)
   end
-end
