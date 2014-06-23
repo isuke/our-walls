@@ -11,9 +11,9 @@ end
 
 def make_users
   puts "make users"
-  10.times do |n|
+  100.times do |n|
     name  = Faker::Name.name
-    email = "example-#{n+1}@example.com"
+    email = "example-#{n}@example.com"
     password  = "foobar"
     User.create!(name:     name,
                  email:    email,
@@ -43,7 +43,9 @@ end
 def make_participants
   puts "make paticipants"
   Wall.all.each do |wall|
-    User.all.sample(1).participants.build(wall_id: wall.id, owner: true).save
+    User.all.sample(1).each do |u|
+      u.participants.build(wall_id: wall.id, owner: true).save
+    end
   end
 end
 
