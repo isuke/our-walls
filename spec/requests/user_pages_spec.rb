@@ -46,7 +46,7 @@ describe "User pages" do
 
   describe "show" do
     let(:delete_user)  { 'delete account' }
-    let(:delete_wall)  { 'delete' }
+    let(:delete_wall)  { 'Delete' }
     let(:user)         { FactoryGirl.create(:user) }
     let(:other_user)   { FactoryGirl.create(:user) }
     let(:wall1)        { FactoryGirl.create(:wall) }
