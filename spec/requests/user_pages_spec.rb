@@ -79,19 +79,35 @@ describe "User pages" do
 
         before { visit user_path(user) }
 
-        it { should have_title(user.name) }
-        it { should have_content(user.name) }
-        it { should have_content(user.email) }
-        it { should have_link(delete_user, href: user_path(user)) }
-        it { should have_content("Walls") }
-        it { should have_selector("span", text: user.walls.count) }
-        it { should have_link(wall1.name) }
-        it { should have_link(wall2.name) }
+        # user info
+        it { should     have_title(user.name) }
+        it { should     have_content(user.name) }
+        it { should     have_content(user.email) }
+        it { should     have_link(delete_user, href: user_path(user)) }
+
+        # Walls
+        it { should     have_content("Walls") }
+        it { should     have_selector("span", text: user.walls.count) }
         it { should     have_content("You") }
         it { should     have_content(wall2.owner.name) }
         it { should     have_link(delete_wall, href: wall_path(wall1)) }
         it { should_not have_link(delete_wall, href: wall_path(wall2)) }
-        it { should     have_content(other_user.name) }
+
+        # Friends
+        it { should     have_content("Friends") }
+        it { should     have_selector("span", text: user.friend_users.count) }
+
+        it "should list each walls" do
+          user.walls.each do |w|
+            expect(page).to have_link(w.name)
+          end
+        end
+
+        it "should list each friends" do
+          user.friend_users do |u|
+            expect(page).to have_content(u.name)
+          end
+        end
 
         context "when click the delete link" do
 
