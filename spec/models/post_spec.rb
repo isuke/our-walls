@@ -1,8 +1,16 @@
 require 'spec_helper'
 
 describe Post do
-  let(:participant) { FactoryGirl.create(:participant) }
-  let(:post)        { participant.posts.build(content: "Lorem ipsum") }
+  let(:user) { FactoryGirl.create(:user) }
+  let(:wall) { FactoryGirl.create(:wall) }
+  let(:participant) do
+    FactoryGirl.create(:owner, wall_id: wall.id, user_id: user.id)
+  end
+  let(:post) do
+    FactoryGirl.build(:post,
+                      participant_id: participant.id,
+                      content: "Lorem ipsum")
+  end
 
   subject { post }
 
@@ -12,6 +20,10 @@ describe Post do
   it { should respond_to(:content) }
   it { should respond_to(:wall) }
   it { should respond_to(:user) }
+
+  its(:content) { should eq "Lorem ipsum" }
+  its(:wall)    { should eq wall }
+  its(:user)    { should eq user }
 
   context "when participant id is not present" do
     before { post.participant_id = nil }

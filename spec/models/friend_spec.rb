@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Friend do
   let(:user)        { FactoryGirl.create(:user) }
   let(:target_user) { FactoryGirl.create(:user) }
-  let(:friend) { user.friends.build(target_user_id: target_user.id) }
+  let(:friend)      { FactoryGirl.build(:friend, user_id: user.id, target_user_id: target_user.id) }
 
   subject { friend }
 

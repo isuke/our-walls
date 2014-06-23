@@ -63,10 +63,9 @@ describe "Wall pages" do
     let!(:friend_user1) { FactoryGirl.create(:user) }
     let!(:friend_user2) { FactoryGirl.create(:user) }
     let!(:participant1) do
-        FactoryGirl.create(:participant,
+        FactoryGirl.create(:owner,
                            wall: wall,
-                           user: user1,
-                           owner: true)
+                           user: user1)
     end
     let!(:participant2) do
       FactoryGirl.create(:participant,
@@ -81,9 +80,12 @@ describe "Wall pages" do
     end
 
     before do
-      #TODO: use FactoryGirl
-      user1.make_friend(friend_user1)
-      user1.make_friend(friend_user2)
+      FactoryGirl.create(:friend,
+                         user_id: user1.id,
+                         target_user_id: friend_user1.id)
+      FactoryGirl.create(:friend,
+                         user_id: user1.id,
+                         target_user_id: friend_user2.id)
     end
 
     context "when signed-in user" do
@@ -114,13 +116,26 @@ describe "Wall pages" do
           end
         end
 
-        context "when post" do
-          before { fill_in 'post_content', with: "Lorem ipsum" }
-          it "should add posts" do
-            expect do
-              click_button "Post"
-            end.to change(Post, :count).by(1)
+        context "when click post button" do
+
+          context "with invalid context" do
+            before { fill_in 'post_content', with: " " }
+            it "should not add posts" do
+              expect do
+                click_button "Post"
+              end.not_to change(Post, :count)
+            end
           end
+
+          context "with valid context" do
+            before { fill_in 'post_content', with: "Lorem ipsum" }
+            it "should add posts" do
+              expect do
+                click_button "Post"
+              end.to change(Post, :count).by(1)
+            end
+          end
+
         end
 
         it "shuld list each friend users" do

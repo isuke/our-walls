@@ -6,6 +6,9 @@ FactoryGirl.define do
     password_confirmation "foobar"
   end
 
+  factory :friend do
+  end
+
   factory :wall do
     sequence(:name)  { |n| "Wall #{n}" }
   end
@@ -13,6 +16,9 @@ FactoryGirl.define do
   factory :participant do
     user
     wall
+    factory :owner do
+      owner true
+    end
   end
 
   factory :post do

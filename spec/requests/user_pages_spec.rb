@@ -44,47 +44,70 @@ describe "User pages" do
     end
   end
 
-  describe "user info page" do
-    let(:delete_user) { 'delete account' }
-    let(:delete_wall) { 'delete' }
-    let(:user) { FactoryGirl.create(:user) }
-    let(:other_user) { FactoryGirl.create(:user) }
-    let(:wall1) { FactoryGirl.create(:wall) }
-    let(:wall2) { FactoryGirl.create(:wall) }
+  describe "show" do
+    let(:delete_user)  { 'delete account' }
+    let(:delete_wall)  { 'delete' }
+    let(:user)         { FactoryGirl.create(:user) }
+    let(:other_user)   { FactoryGirl.create(:user) }
+    let(:wall1)        { FactoryGirl.create(:wall) }
+    let(:wall2)        { FactoryGirl.create(:wall) }
 
     before do
-      #TODO: refactoring
-      p1 = wall1.participate(user)
-      p1.owner = true
-      p1.save
-      wall1.participate(other_user).save
+      FactoryGirl.create(:owner,
+                         wall_id: wall1.id,
+                         user_id: user.id)
+      FactoryGirl.create(:participant,
+                         wall_id: wall1.id,
+                         user_id: other_user.id)
+      FactoryGirl.create(:participant,
+                         wall_id: wall2.id,
+                         user_id: user.id)
+      FactoryGirl.create(:owner,
+                         wall_id: wall2.id,
+                         user_id: other_user.id)
 
-      wall2.participate(user).save
-      p2 = wall2.participate(other_user)
-      p2.owner = true
-      p2.save
-      end
+      FactoryGirl.create(:friend,
+                         user_id: user.id,
+                         target_user_id: other_user.id)
+    end
 
     context "when signd-in user" do
 
       before { sign_in user }
 
-      context "visit this user info page" do
+      context "visit the user's page" do
 
         before { visit user_path(user) }
 
-        it { should have_title(user.name) }
-        it { should have_content(user.name) }
-        it { should have_content(user.email) }
-        it { should have_link(delete_user, href: user_path(user)) }
-        it { should have_content("Walls") }
-        it { should have_selector("span", text: user.walls.count) }
-        it { should have_link(wall1.name) }
-        it { should have_link(wall2.name) }
+        # user info
+        it { should     have_title(user.name) }
+        it { should     have_content(user.name) }
+        it { should     have_content(user.email) }
+        it { should     have_link(delete_user, href: user_path(user)) }
+
+        # Walls
+        it { should     have_content("Walls") }
+        it { should     have_selector("span", text: user.walls.count) }
         it { should     have_content("You") }
         it { should     have_content(wall2.owner.name) }
         it { should     have_link(delete_wall, href: wall_path(wall1)) }
         it { should_not have_link(delete_wall, href: wall_path(wall2)) }
+
+        # Friends
+        it { should     have_content("Friends") }
+        it { should     have_selector("span", text: user.friend_users.count) }
+
+        it "should list each walls" do
+          user.walls.each do |w|
+            expect(page).to have_link(w.name)
+          end
+        end
+
+        it "should list each friends" do
+          user.friend_users do |u|
+            expect(page).to have_content(u.name)
+          end
+        end
 
         context "when click the delete link" do
 
@@ -125,13 +148,9 @@ describe "User pages" do
 
           it { should have_title(wall1.name) }
         end
-
-        # TODO: friends spec
       end
 
-      context "visit other user info page" do
-        let(:other_user) { FactoryGirl.create(:user) }
-
+      context "visit other user's page" do
         before { visit user_path(other_user) }
 
         it { should have_title('Our Walls') }
