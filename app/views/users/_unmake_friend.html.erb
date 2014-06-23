@@ -1,5 +1,7 @@
 <%= form_for(current_user.friends.find_by(target_user_id: user.id),
              html: { method: :delete },
              remote: true) do |f| %>
-  <%= f.submit "Unmake friend", class: "btn btn-xs btn-default" %>
+  <%= button_tag( class: "btn btn-default btn-xs") do %>
+    <%= content_tag :span, "Friend", class: "glyphicon glyphicon-minus" %>
+  <% end %>
 <% end %>
