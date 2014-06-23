@@ -5,7 +5,7 @@
   <h2><small>owner is <%= pronoun_or_name_for(@wall.owner) %></small></h2>
 
   <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-3">
       <%= render 'posts/form',
                   participant: @wall.participant(current_user) %>
       <%= render 'participanting_users', users: @wall.users %>
@@ -13,7 +13,7 @@
         <%= render 'invite_friends', users: current_user.friend_users %>
       <% end %>
     </div>
-    <div class="col-sm-8">
+    <div class="col-sm-9">
       <%= render 'posts', posts: @wall.posts %>
     </div>
   </div>

@@ -2,5 +2,8 @@
              method: :delete) do |f| %>
   <%= f.hidden_field :wall_id %>
   <%= f.hidden_field :user_id %>
-  <%= f.submit "Leave", class: "btn btn-xs btn-default" %>
+  <%#= f.submit "Leave", class: "btn btn-xs btn-default" %>
+  <%= button_tag( class: "btn btn-default btn-xs") do %>
+    <%= content_tag :span, "Leave", class: "glyphicon glyphicon-arrow-down" %>
+  <% end %>
 <% end %>
