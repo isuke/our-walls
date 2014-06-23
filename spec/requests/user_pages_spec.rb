@@ -44,7 +44,7 @@ describe "User pages" do
     end
   end
 
-  describe "user info page" do
+  describe "show" do
     let(:delete_user)  { 'delete account' }
     let(:delete_wall)  { 'delete' }
     let(:user)         { FactoryGirl.create(:user) }
@@ -75,7 +75,7 @@ describe "User pages" do
 
       before { sign_in user }
 
-      context "visit this user info page" do
+      context "visit the user's page" do
 
         before { visit user_path(user) }
 
@@ -150,7 +150,7 @@ describe "User pages" do
         end
       end
 
-      context "visit other user info page" do
+      context "visit other user's page" do
         before { visit user_path(other_user) }
 
         it { should have_title('Our Walls') }

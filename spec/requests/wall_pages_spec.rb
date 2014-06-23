@@ -116,13 +116,26 @@ describe "Wall pages" do
           end
         end
 
-        context "when post" do
-          before { fill_in 'post_content', with: "Lorem ipsum" }
-          it "should add posts" do
-            expect do
-              click_button "Post"
-            end.to change(Post, :count).by(1)
+        context "when click post button" do
+
+          context "with invalid context" do
+            before { fill_in 'post_content', with: " " }
+            it "should not add posts" do
+              expect do
+                click_button "Post"
+              end.not_to change(Post, :count)
+            end
           end
+
+          context "with valid context" do
+            before { fill_in 'post_content', with: "Lorem ipsum" }
+            it "should add posts" do
+              expect do
+                click_button "Post"
+              end.to change(Post, :count).by(1)
+            end
+          end
+
         end
 
         it "shuld list each friend users" do
