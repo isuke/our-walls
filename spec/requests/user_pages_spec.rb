@@ -65,6 +65,10 @@ describe "User pages" do
       FactoryGirl.create(:owner,
                          wall_id: wall2.id,
                          user_id: other_user.id)
+
+      FactoryGirl.create(:friend,
+                         user_id: user.id,
+                         target_user_id: other_user.id)
     end
 
     context "when signd-in user" do
@@ -87,6 +91,7 @@ describe "User pages" do
         it { should     have_content(wall2.owner.name) }
         it { should     have_link(delete_wall, href: wall_path(wall1)) }
         it { should_not have_link(delete_wall, href: wall_path(wall2)) }
+        it { should     have_content(other_user.name) }
 
         context "when click the delete link" do
 
@@ -127,8 +132,6 @@ describe "User pages" do
 
           it { should have_title(wall1.name) }
         end
-
-        # TODO: friends spec
       end
 
       context "visit other user info page" do
