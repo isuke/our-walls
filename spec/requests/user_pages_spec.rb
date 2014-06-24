@@ -179,11 +179,6 @@ describe "User pages" do
       end
 
       it { should have_title('Users')}
-      it "should list each users" do
-        User.where(['id <> ?', user.id]).each do |u|
-          expect(page).to have_selector('div', text: u.name)
-        end
-      end
 
       describe "pagination" do
         before(:all) { 50.times { FactoryGirl.create(:user) } }
@@ -192,8 +187,9 @@ describe "User pages" do
         it { should have_selector('div.pagination') }
 
         it "should list each user" do
-          User.paginate(page: 1).each do |u|
-            expect(page).to have_selector('div', text: u.name)
+          User.where('id <> ?', user.id).order('name').
+               paginate(page: 1).each do |u|
+            expect(page).to have_selector('li div', text: u.name)
           end
         end
       end
