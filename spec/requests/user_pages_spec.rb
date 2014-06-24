@@ -199,7 +199,7 @@ describe "User pages" do
 
       describe "search" do
         before do
-          fill_in "Name", with: "bc"
+          fill_in "search", with: "bc"
           click_button "Search"
         end
 

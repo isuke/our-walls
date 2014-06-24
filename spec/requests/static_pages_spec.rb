@@ -18,7 +18,7 @@ describe "Static pages" do
         visit root_path
       end
 
-      it { should have_link('Users')}
+      it { should have_button('Search')}
       it { should have_link(user.name)}
       it { should have_link('Sign out') }
 

@@ -33,7 +33,7 @@ class UsersController < ApplicationController
   end
 
   def index
-    @name = params["name"] || ''
+    @name = params["search"] || ''
     @users = User.where(['id <> ?', current_user.id]).
                   where('name like ?', '%' + @name + '%').
                   order("name").
