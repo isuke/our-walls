@@ -11,10 +11,12 @@
           <strong>You</strong>
         </td>
         <td>
-          <%= link_to "delete",
-                      wall,
+          <%= link_to wall,
                       method: :delete,
-                      data: { confirm: "You sure?" } %>
+                      data: { confirm: "You sure?" },
+                      class: "btn btn-xs btn-warning" do %>
+            <span class="glyphicon glyphicon-remove"></span>Delete
+          <% end %>
         </td>
       <% else %>
         <td colspan="2">

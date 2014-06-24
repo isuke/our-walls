@@ -72,25 +72,25 @@ describe "Wall pages" do
                          wall: wall,
                          user: user2)
     end
-    let!(:post1_1) do
-      FactoryGirl.create(:post, participant: participant1)
-    end
-    let!(:post1_2) do
-      FactoryGirl.create(:post, participant: participant2)
-    end
 
     before do
+      FactoryGirl.create(:post, participant: participant1)
+      FactoryGirl.create(:post, participant: participant2)
+
       FactoryGirl.create(:friend,
                          user_id: user1.id,
                          target_user_id: friend_user1.id)
       FactoryGirl.create(:friend,
                          user_id: user1.id,
                          target_user_id: friend_user2.id)
+      30.times do
+        FactoryGirl.create(:post, participant: participant1)
+      end
     end
 
     context "when signed-in user" do
 
-      context "When owner user" do
+      context "when owner user" do
         before do
           sign_in user1
           visit wall_path(wall)
@@ -104,15 +104,17 @@ describe "Wall pages" do
         it { should have_button 'Invite' }
 
         it "should list each users" do
-          wall.users.each do |u|
-            expect(page).to have_selector('li', text: u.name)
+          wall.users.where('user_id <> ?', user1.id).each do |u|
+            expect(page).to have_selector('td', text: u.name)
           end
         end
 
-        it "shuld list each posts" do
-          wall.posts do |p|
-            expect(page).to have_content(p.name)
-            expect(page).to have_content(p.context)
+        describe "pagination" do
+          it { should have_selector('div.pagination') }
+          it "should list each post" do
+            wall.posts.paginate(page: 1).each do |p|
+              expect(page).to have_selector('li div p', text: p.content)
+            end
           end
         end
 
@@ -161,7 +163,7 @@ describe "Wall pages" do
         end
       end
 
-      context "When not owner user" do
+      context "when not owner user" do
         before do
           sign_in user2
           visit wall_path(wall)

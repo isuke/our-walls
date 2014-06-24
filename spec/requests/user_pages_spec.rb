@@ -46,7 +46,7 @@ describe "User pages" do
 
   describe "show" do
     let(:delete_user)  { 'delete account' }
-    let(:delete_wall)  { 'delete' }
+    let(:delete_wall)  { 'Delete' }
     let(:user)         { FactoryGirl.create(:user) }
     let(:other_user)   { FactoryGirl.create(:user) }
     let(:wall1)        { FactoryGirl.create(:wall) }
@@ -168,7 +168,7 @@ describe "User pages" do
   describe "index" do
     let(:user) { FactoryGirl.create(:user) }
 
-    before(:all) { 10.times { FactoryGirl.create(:user) } }
+    before(:all) { 3.times { FactoryGirl.create(:user) } }
     after(:all)  { User.delete_all }
 
     context "when signed-in user" do
@@ -179,9 +179,18 @@ describe "User pages" do
       end
 
       it { should have_title('Users')}
-      it "should list each users" do
-        User.where(['id <> ?', user.id]).each do |u|
-          expect(page).to have_selector('div', text: u.name)
+
+      describe "pagination" do
+        before(:all) { 50.times { FactoryGirl.create(:user) } }
+        after(:all)  { User.delete_all }
+
+        it { should have_selector('div.pagination') }
+
+        it "should list each user" do
+          User.where('id <> ?', user.id).order('name').
+               paginate(page: 1).each do |u|
+            expect(page).to have_selector('li div', text: u.name)
+          end
         end
       end
     end

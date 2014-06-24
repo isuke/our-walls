@@ -33,7 +33,9 @@ class UsersController < ApplicationController
   end
 
   def index
-    @users = User.where(['id <> ?', current_user.id])
+    @users = User.where(['id <> ?', current_user.id]).
+                  order("name").
+                  paginate(page: params[:page], per_page: 50)
   end
 
   private

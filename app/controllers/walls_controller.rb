@@ -23,6 +23,7 @@ class WallsController < ApplicationController
 
   def show
     @wall = Wall.find(params[:id])
+    @posts = @wall.posts.paginate(page: params[:page], per_page: 20)
   end
 
   def destroy

@@ -1,5 +1,7 @@
 <%= form_for(current_user.friends.build(target_user_id: user.id),
              remote: true) do |f| %>
   <%= f.hidden_field :target_user_id %>
-  <%= f.submit "Make friend", class: "btn btn-xs btn-primary" %>
+  <%= button_tag( class: "btn btn-primary btn-xs") do %>
+    <%= content_tag :span, "Friend", class: "glyphicon glyphicon-plus" %>
+  <% end %>
 <% end %>

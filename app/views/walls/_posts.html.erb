@@ -1,3 +1,5 @@
+<%= will_paginate posts %>
+
 <ul class="media-list">
   <% posts.order("created_at").reverse_order.each do |post| %>
     <li class="media">
@@ -17,3 +19,5 @@
     </li>
   <% end %>
 </ul>
+
+<%= will_paginate posts %>

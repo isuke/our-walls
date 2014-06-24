@@ -1,6 +1,6 @@
 <h3>Posts</h3>
 <%= form_for participant.posts.build do |f| %>
   <%= f.hidden_field :participant_id %>
-  <%= f.text_area :content %>
+  <%= f.text_area :content, class: "post_form" %>
   <p><%= f.submit "Post", class: "btn btn-large btn-primary" %></p>
 <% end %>
