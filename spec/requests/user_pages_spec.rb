@@ -166,10 +166,13 @@ describe "User pages" do
   end
 
   describe "index" do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryGirl.create(:user, name: "xxx") }
 
-    before(:all) { 3.times { FactoryGirl.create(:user) } }
-    after(:all)  { User.delete_all }
+    before do
+      FactoryGirl.create(:user, name: "abc")
+      FactoryGirl.create(:user, name: "bcd")
+      FactoryGirl.create(:user, name: "cdf")
+    end
 
     context "when signed-in user" do
 
@@ -190,6 +193,19 @@ describe "User pages" do
           User.where('id <> ?', user.id).order('name').
                paginate(page: 1).each do |u|
             expect(page).to have_selector('li div', text: u.name)
+          end
+        end
+      end
+
+      describe "search" do
+        before do
+          fill_in "Name", with: "bc"
+          click_button "Search"
+        end
+
+        it "should not list each non hit user" do
+          User.where("name like not '%bc%'").each do |u|
+            expect(page).not_to have_selector('li div', text: u.name)
           end
         end
       end

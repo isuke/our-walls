@@ -2,7 +2,11 @@
 
 <div class="well">
 
-  <h1>Users</h1>
+  <h1>Users <span class="badge"><%= @users.count %></span></h1>
+
+  <div class="user_search">
+    <%= render 'search_form', name: @name %>
+  </div>
 
   <%= will_paginate %>
 

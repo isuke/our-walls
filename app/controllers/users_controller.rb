@@ -33,7 +33,9 @@ class UsersController < ApplicationController
   end
 
   def index
+    @name = params["name"] || ''
     @users = User.where(['id <> ?', current_user.id]).
+                  where('name like ?', '%' + @name + '%').
                   order("name").
                   paginate(page: params[:page], per_page: 50)
   end
