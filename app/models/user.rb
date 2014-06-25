@@ -40,6 +40,10 @@ class User < ActiveRecord::Base
     self.friends.find_by(target_user_id: other_user.id).destroy
   end
 
+  def own_walls
+    self.participants.where(owner: true).map(&:wall)
+  end
+
   private
 
     def create_remember_token

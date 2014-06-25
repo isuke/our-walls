@@ -117,6 +117,12 @@ describe "User pages" do
             end.to change(User, :count).by(-1)
           end
 
+          it "should delete the user own walls" do
+            expect do
+              click_link(delete_user)
+            end.to change(Wall, :count).by(-1)
+          end
+
           context "after delete the user" do
             before { click_link(delete_user) }
 

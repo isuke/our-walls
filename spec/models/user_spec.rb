@@ -20,6 +20,7 @@ describe User do
   it { should respond_to(:unmake_friend) }
   it { should respond_to(:participants) }
   it { should respond_to(:walls) }
+  it { should respond_to(:own_walls) }
 
   it { should be_valid }
 
