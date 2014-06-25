@@ -89,7 +89,7 @@ describe "User pages" do
         it { should     have_content("Walls") }
         it { should     have_selector("span", text: user.walls.count) }
         it { should     have_content("You") }
-        it { should     have_content(wall2.owner.name) }
+        it { should     have_content(wall2.owner_user.name) }
         it { should     have_link(delete_wall, href: wall_path(wall1)) }
         it { should_not have_link(delete_wall, href: wall_path(wall2)) }
 

@@ -6,7 +6,7 @@
       <td>
         <%= link_to truncate(wall.name, length: 20), wall %>
       </td>
-      <% if wall.owner?(current_user) %>
+      <% if wall.owner_user?(current_user) %>
         <td>
           <strong>You</strong>
         </td>
@@ -20,7 +20,7 @@
         </td>
       <% else %>
         <td colspan="2">
-          <%= truncate(wall.owner.name, length: 20) %>
+          <%= truncate(wall.owner_user.name, length: 20) %>
         </td>
       <% end %>
     </tr>

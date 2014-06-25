@@ -17,11 +17,11 @@ class Wall < ActiveRecord::Base
     self.users.include? user
   end
 
-  def owner
+  def owner_user
     self.participants.find_by(owner: true).user
   end
 
-  def owner?(user)
+  def owner_user?(user)
     self.participant(user).owner
   end
 end
