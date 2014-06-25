@@ -2,14 +2,14 @@
 
 <div class="well">
   <h1><%= @wall.name %></h1>
-  <h2><small>owner is <%= pronoun_or_name_for(@wall.owner) %></small></h2>
+  <h2><small>owner is <%= pronoun_or_name_for(@wall.owner_user) %></small></h2>
 
   <div class="row">
     <div class="col-sm-3">
       <%= render 'posts/form',
                   participant: @wall.participant(current_user) %>
       <%= render 'participanting_users', users: @wall.users %>
-      <% if @wall.owner?(current_user) %>
+      <% if @wall.owner_user?(current_user) %>
         <%= render 'invite_friends', users: current_user.friend_users %>
       <% end %>
     </div>

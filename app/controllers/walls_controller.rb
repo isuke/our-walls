@@ -9,7 +9,7 @@ class WallsController < ApplicationController
     @wall = Wall.new(wall_params)
     @user = User.find(params[:id])
 
-    User.transaction do
+    ActiveRecord::Base.transaction do
       @wall.save!
       p = @wall.participate(@user)
       p.owner = true

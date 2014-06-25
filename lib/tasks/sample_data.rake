@@ -46,8 +46,8 @@ def make_participants(walls, users)
   puts "make participants"
   walls.each_with_index do |wall, i|
     dup_users = users.dup
-    owner = dup_users.delete_at(i)
-    make_participant_and_posts(10, wall, owner, true)
+    owner_user = dup_users.delete_at(i)
+    make_participant_and_posts(10, wall, owner_user, true)
     dup_users.each do |user|
       make_participant_and_posts(10, wall, user)
     end

@@ -27,7 +27,11 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    User.find(params[:id]).destroy
+    ActiveRecord::Base.transaction do
+      user = User.find(params[:id])
+      user.own_walls.each(&:destroy)
+      user.destroy
+    end
     flash[:success] = "User destroyed."
     redirect_to root_url
   end

@@ -14,8 +14,8 @@ describe Wall do
   it { should respond_to(:participant) }
   it { should respond_to(:participant?) }
   it { should respond_to(:posts) }
-  it { should respond_to(:owner) }
-  it { should respond_to(:owner?) }
+  it { should respond_to(:owner_user) }
+  it { should respond_to(:owner_user?) }
 
   it { should be_valid }
 
@@ -49,15 +49,15 @@ describe Wall do
         before { wall.participant(user).update_attributes!(owner: true) }
 
         it "should be true" do
-          expect(wall.owner?(user)).to be_true
+          expect(wall.owner_user?(user)).to be_true
         end
 
-        its(:owner) { should eq user }
+        its(:owner_user) { should eq user }
       end
 
       context "when not owner user" do
         it "should be false" do
-          expect(wall.owner?(user)).to be_false
+          expect(wall.owner_user?(user)).to be_false
         end
       end
     end
