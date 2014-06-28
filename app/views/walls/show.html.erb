@@ -8,7 +8,9 @@
     <div class="col-sm-3">
       <%= render 'posts/form',
                   participant: @wall.participant(current_user) %>
-      <%= render 'participanting_users', users: @wall.users %>
+      <%= render 'participanting_users',
+                 wall: @wall,
+                 users: @wall.users %>
       <% if @wall.owner_user?(current_user) %>
         <%= render 'invite_friends', users: current_user.friend_users %>
       <% end %>
