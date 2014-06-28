@@ -53,9 +53,9 @@ describe "User pages" do
     let(:wall2)        { FactoryGirl.create(:wall) }
 
     before do
-      FactoryGirl.create(:owner,
-                         wall_id: wall1.id,
-                         user_id: user.id)
+      p = FactoryGirl.create(:owner,
+                             wall_id: wall1.id,
+                             user_id: user.id)
       FactoryGirl.create(:participant,
                          wall_id: wall1.id,
                          user_id: other_user.id)
@@ -69,6 +69,11 @@ describe "User pages" do
       FactoryGirl.create(:friend,
                          user_id: user.id,
                          target_user_id: other_user.id)
+
+      3.times do
+        FactoryGirl.create(:post,
+                           participant_id: p.id)
+      end
     end
 
     context "when signd-in user" do
@@ -146,6 +151,11 @@ describe "User pages" do
             expect do
               click_link(delete_wall, href: wall_path(wall1))
             end.to change(Participant, :count).by(-wall1.users.count)
+          end
+          it "should be able to delete posts" do
+            expect do
+              click_link(delete_wall, href: wall_path(wall1))
+            end.to change(Post, :count).by(-3)
           end
         end
 

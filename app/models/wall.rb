@@ -1,5 +1,5 @@
 class Wall < ActiveRecord::Base
-  has_many :participants, dependent: :delete_all
+  has_many :participants, dependent: :destroy
   has_many :users, through: :participants
   has_many :posts, through: :participants
 
