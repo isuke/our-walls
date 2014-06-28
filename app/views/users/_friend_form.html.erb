@@ -1,7 +1,7 @@
 <%= content_tag :div, id: "friend_from-#{user.id}" do %>
   <% if current_user.friend? user %>
-    <%= render 'unmake_friend', user: user %>
+    <%= render 'users/unmake_friend', user: user %>
   <% else %>
-    <%= render 'make_friend', user: user %>
+    <%= render 'users/make_friend', user: user %>
   <% end %>
 <% end %>

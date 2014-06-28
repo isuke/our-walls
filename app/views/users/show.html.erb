@@ -1,17 +1,17 @@
 <% provide(:title, @user.name) %>
 
 <div class="well">
-  <%= render 'profile' %>
+  <%= render 'users/profile' %>
   <div class="row">
     <div class="col-md-4">
       <h3>News <span class="badge">0</span></h3>
       <!-- TODO -->
     </div>
     <div class="col-md-4">
-      <%= render 'walls', walls: @user.walls %>
+      <%= render 'users/walls', walls: @user.walls %>
     </div>
     <div class="col-md-4">
-      <%= render 'friends', friend_users: @user.friend_users %>
+      <%= render 'users/friends', friend_users: @user.friend_users %>
     </div>
   </div>
 </div>

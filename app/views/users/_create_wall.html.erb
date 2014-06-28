@@ -1,0 +1,9 @@
+<%= form_for(wall, html: {class: "form-horizontal"}) do |f| %>
+  <%= render 'shared/error_messages', f: f %>
+    <div class="input-group">
+      <%= f.text_field :name, placeholder: "Wall Name", class: "form-control" %>
+    <span class="input-group-btn">
+      <%= f.submit "Create new wall", class: "btn btn-primary" %>
+    </span>
+  </div>
+<% end %>

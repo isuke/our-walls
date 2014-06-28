@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   resources :users, only: [:create, :show, :destroy, :index] do
     member do
-      resources :walls, only: [:new, :create]
+      resources :walls, only: :create
     end
   end
   resources :walls, only: [:show  , :destroy] do
