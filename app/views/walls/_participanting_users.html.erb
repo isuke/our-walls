@@ -8,7 +8,9 @@
       <tr>
         <td><%= truncate(user.name, length: 20) %></td>
         <% if @wall.owner_user?(current_user) %>
-          <td><%= render 'participants/leave_form', user: user %></td>
+          <td><%= render 'participants/leave_form',
+                         wall: wall,
+                         user: user %></td>
         <% end %>
       </tr>
     <% end %>

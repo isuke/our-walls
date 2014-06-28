@@ -19,8 +19,12 @@
           <% end %>
         </td>
       <% else %>
-        <td colspan="2">
+        <td>
           <%= truncate(wall.owner_user.name, length: 20) %>
+        </td>
+        <td><%= render 'participants/leave_form',
+                       wall: wall,
+                       user: current_user %>
         </td>
       <% end %>
     </tr>

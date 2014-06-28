@@ -47,32 +47,40 @@ describe "User pages" do
   describe "show" do
     let(:delete_user)  { 'delete account' }
     let(:delete_wall)  { 'Delete' }
+    let(:leave)        { 'Leave' }
     let(:user)         { FactoryGirl.create(:user) }
     let(:other_user)   { FactoryGirl.create(:user) }
     let(:wall1)        { FactoryGirl.create(:wall) }
     let(:wall2)        { FactoryGirl.create(:wall) }
-
-    before do
-      p = FactoryGirl.create(:owner,
-                             wall_id: wall1.id,
-                             user_id: user.id)
+    let!(:p_w1_user) do
+      FactoryGirl.create(:owner,
+                         wall_id: wall1.id,
+                         user_id: user.id)
+    end
+    let!(:p_w1_other_user) do
       FactoryGirl.create(:participant,
                          wall_id: wall1.id,
                          user_id: other_user.id)
+    end
+    let!(:p_w2_user) do
       FactoryGirl.create(:participant,
                          wall_id: wall2.id,
                          user_id: user.id)
+    end
+    let!(:p_w2_other_user) do
       FactoryGirl.create(:owner,
                          wall_id: wall2.id,
                          user_id: other_user.id)
+    end
 
+    before do
       FactoryGirl.create(:friend,
                          user_id: user.id,
                          target_user_id: other_user.id)
 
       3.times do
         FactoryGirl.create(:post,
-                           participant_id: p.id)
+                           participant_id: p_w1_user.id)
       end
     end
 
@@ -97,6 +105,7 @@ describe "User pages" do
         it { should     have_content(wall2.owner_user.name) }
         it { should     have_link(delete_wall, href: wall_path(wall1)) }
         it { should_not have_link(delete_wall, href: wall_path(wall2)) }
+        it { should     have_button(leave    , count: 1) }
 
         # Friends
         it { should     have_content("Friends") }
@@ -156,6 +165,14 @@ describe "User pages" do
             expect do
               click_link(delete_wall, href: wall_path(wall1))
             end.to change(Post, :count).by(-3)
+          end
+        end
+
+        context "when click leave button" do
+          it "should decrement participant" do
+            expect do
+              click_button leave, match: :first
+            end.to change(Participant, :count).by(-1)
           end
         end
 

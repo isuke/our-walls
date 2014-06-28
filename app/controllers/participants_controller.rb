@@ -8,7 +8,7 @@ class ParticipantsController < ApplicationController
     if @participant.save
       flash[:success] = "Welcome #{user.name}"
     end
-    redirect_to wall_path @wall
+    redirect_to request.referer
   end
 
   def destroy
@@ -16,7 +16,7 @@ class ParticipantsController < ApplicationController
     user  = User.find(params[:participant][:user_id])
     Participant.find(params[:id]).destroy
     flash[:success] = "See you #{user.name}."
-    redirect_to wall_path @wall
+    redirect_to request.referer
   end
 
 end
