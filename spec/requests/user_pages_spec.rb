@@ -48,6 +48,8 @@ describe "User pages" do
     let(:delete_user)  { 'delete account' }
     let(:delete_wall)  { 'Delete' }
     let(:leave)        { 'Leave' }
+    let(:create_wall)  { 'Create new wall' }
+
     let(:user)         { FactoryGirl.create(:user) }
     let(:other_user)   { FactoryGirl.create(:user) }
     let(:wall1)        { FactoryGirl.create(:wall) }
@@ -106,6 +108,7 @@ describe "User pages" do
         it { should     have_link(delete_wall, href: wall_path(wall1)) }
         it { should_not have_link(delete_wall, href: wall_path(wall2)) }
         it { should     have_button(leave    , count: 1) }
+        it { should     have_button(create_wall) }
 
         # Friends
         it { should     have_content("Friends") }
@@ -144,10 +147,38 @@ describe "User pages" do
           end
         end
 
-        context "when click the create wall link" do
-          before { click_link 'create wall' }
+        context "when click the create new wall button" do
 
-          it { should have_title('Create Wall') }
+          context "with invalid information" do
+            it "should not create a wall" do
+              expect { click_button create_wall }.not_to change(Wall, :count)
+            end
+
+            context "after submission" do
+              before { click_button create_wall }
+
+              it { should have_selector('div.alert.alert-danger', text: 'error') }
+            end
+          end
+
+          context "with valid information" do
+            before { fill_in "Wall Name", with: "Example Wall" }
+
+            it "should create a wall" do
+              expect { click_button create_wall }.to change(Wall, :count).by(1)
+            end
+
+            it "should create a participant" do
+              expect { click_button create_wall }.to change(Participant, :count).by(1)
+            end
+
+            context "after save the wall" do
+              before { click_button create_wall }
+
+              it { should have_title(user.name) }
+              it { should have_selector('div.alert.alert-success', text: 'Example Wall') }
+            end
+          end
         end
 
         context "when click a delete wall link" do

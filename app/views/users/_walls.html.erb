@@ -30,6 +30,5 @@
     </tr>
   <% end %>
 </table>
-<p>
-  <%= link_to "create wall", controller: "walls", action: "new"%>
-</p>
+
+<%= render 'users/create_wall', wall: @wall %>

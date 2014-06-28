@@ -1,10 +1,6 @@
 class WallsController < ApplicationController
   include ApplicationHelper
 
-  def new
-    @wall = Wall.new
-  end
-
   def create
     @wall = Wall.new(wall_params)
     @user = User.find(params[:id])
@@ -18,7 +14,7 @@ class WallsController < ApplicationController
     flash[:success] = "Create #{@wall.name}"
     redirect_to user_path current_user
   rescue
-    render 'new'
+    render template: 'users/show'
   end
 
   def show

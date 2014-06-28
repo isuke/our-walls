@@ -20,6 +20,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    @wall = Wall.new
     unless current_user?(@user)
       flash[:danger] = "Please sign in with the corrent user."
       redirect_to root_path
